@@ -1,0 +1,8 @@
+<li><a href="#/syrorders/">{_wp('Order Report')}</a></li>
+<script type="text/javascript">
+    $(function(){
+        $.reports.syrordersAction = function(){
+            $("#reportscontent").load("?plugin=syrreporders&action=report"+this.getTimeframeParams());
+        };
+    });
+</script>

@@ -1,0 +1,75 @@
+{$weekdays_for_best = [_wp("Monday"), _wp("Tuesday"), _wp("Wednesday"), _wp("Thursday"), _wp("Friday"), _wp("Saturday"), _wp("Sunday")]}
+<div class="content">
+    <div id="reports-orders-graph" class="s-graph"></div>
+    
+    <div class="block double-padded">
+        <div class="sidebar left400px">
+            <h2>{_wp("Best Weekdays")}</h2>
+            <div class="fields">
+                <div class="field-group">
+                    <div class="field">
+                        <div class="name">{_wp('Max number of orders')}</div>
+                        <div class="value">{foreach $stats.dow.top.count as $dow}{if !$dow@first}, {/if}{$weekdays_for_best[$dow.dow]}{/foreach}</div>
+                    </div>
+                    <div class="field">
+                        <div class="name">{_wp('Max total amount')}</div>
+                        <div class="value">{foreach $stats.dow.top.sum as $dow}{if !$dow@first}, {/if}{$weekdays_for_best[$dow.dow]}{/foreach}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content left400px">
+            <div id="reports-dow-orders" class="s-graph"></div>
+        </div>
+    </div>
+    <div class="clear-both"></div>
+</div>
+
+<div class="clear-both"></div>
+
+<script type="text/javascript">(function() {
+
+    document.title = '{_wp("Order Report")|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}';
+    
+    {$cnt = count($chart_data)};
+    {$scale = floor($cnt/35) + 1}
+    $.reports.graph('reports-orders-graph', 
+        {json_encode($chart_data)}, 
+        {if $group_by == 'days'}0{else}1{/if},
+        "{if $cnt <= 35}1 {if $group_by != 'days'}month{else}day{/if}{else}{$scale} {if $group_by != 'days'}months{else}days{/if}{/if}"
+    );
+    
+    var dow_orders;
+    dow_orders = [{foreach $stats.dow.data as $dow}{$dow.count}{if !$dow@last},{/if}{/foreach}];
+    
+    console.log([dow_orders]);
+    
+    $.jqplot("reports-dow-orders", [dow_orders], {
+        seriesDefaults: {
+            renderer: $.jqplot.BarRenderer,
+            rendererOptions: { fillToZero: true },
+            pointLabels: {
+                show: true
+            }
+        },
+       grid: {
+            shadow: true
+        },
+        axes: {
+            xaxis: {
+                renderer: $.jqplot.CategoryAxisRenderer,
+                ticks: [ "{_wp("Monday")|escape:"javascript"}", "{_wp("Tuesday")|escape:"javascript"}", "{_wp("Wednesday")|escape:"javascript"}", "{_wp("Thursday")|escape:"javascript"}", "{_wp("Friday")|escape:"javascript"}", "{_wp("Saturday")|escape:"javascript"}", "{_wp("Sunday")|escape:"javascript"}" ]
+            },
+            yaxis: {
+                tickOptions: { formatString: '%d' },
+                min: 0
+            }
+        },
+        cursor: {
+            show: false
+        },
+        title: '{_wp("Orders by Weekdays")|escape:"javascript"}'
+    });
+    
+})();</script>
+
