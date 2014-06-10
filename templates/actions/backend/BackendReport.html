@@ -1,48 +1,124 @@
 {$weekdays_for_best = [_wp("Monday"), _wp("Tuesday"), _wp("Wednesday"), _wp("Thursday"), _wp("Friday"), _wp("Saturday"), _wp("Sunday")]}
-<div class="content">
-    <div id="reports-orders-graph" class="s-graph"></div>
-    
-    <div class="block double-padded">
-        <div class="sidebar left400px">
-            <h2>{_wp("Best Weekdays")}</h2>
-            <div class="fields">
-                <div class="field-group">
-                    <div class="field">
-                        <div class="name">{_wp('Max number of orders')}</div>
-                        <div class="value">{foreach $stats.dow.top.count as $dow}{if !$dow@first}, {/if}{$weekdays_for_best[$dow.dow]}{/foreach}</div>
-                    </div>
-                    <div class="field">
-                        <div class="name">{_wp('Max total amount')}</div>
-                        <div class="value">{foreach $stats.dow.top.sum as $dow}{if !$dow@first}, {/if}{$weekdays_for_best[$dow.dow]}{/foreach}</div>
+<div class="block double-padded">
+    <div class="content">
+        <div id="reports-orders-graph" class="s-graph"></div>
+
+        <div class="block double-padded">
+            <div class="sidebar left400px">
+                <h2>{_wp("Best Weekdays")}</h2>
+                <div class="fields">
+                    <div class="field-group">
+                        <div class="field">
+                            <div class="name">{_wp('Max number of orders')}</div>
+                            <div class="value">{foreach $stats.dow.top.count as $dow}{if !$dow@first}, {/if}{$weekdays_for_best[$dow.dow]}{/foreach}</div>
+                        </div>
+                        <div class="field">
+                            <div class="name">{_wp('Max total amount')}</div>
+                            <div class="value">{foreach $stats.dow.top.sum as $dow}{if !$dow@first}, {/if}{$weekdays_for_best[$dow.dow]}{/foreach}</div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <div class="content left400px">
+                <div id="reports-dow-orders" class="s-graph"></div>
+            </div>
         </div>
-        <div class="content left400px">
-            <div id="reports-dow-orders" class="s-graph"></div>
-        </div>
+        <div class="clear-both"></div>
     </div>
-    <div class="clear-both"></div>
 </div>
-
 <div class="clear-both"></div>
 
 <script type="text/javascript">(function() {
 
     document.title = '{_wp("Order Report")|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}';
     
-    {$cnt = count($chart_data)};
+    {$cnt = count($chart_data['count'])};
     {$scale = floor($cnt/35) + 1}
-    $.reports.graph('reports-orders-graph', 
-        {json_encode($chart_data)}, 
-        {if $group_by == 'days'}0{else}1{/if},
-        "{if $cnt <= 35}1 {if $group_by != 'days'}month{else}day{/if}{else}{$scale} {if $group_by != 'days'}months{else}days{/if}{/if}"
-    );
+    //$.reports.graph('reports-orders-graph', 
+    //    {json_encode($chart_data['count'])}, 
+    //    {if $group_by == 'days'}0{else}1{/if},
+    //    "{if $cnt <= 35}1 {if $group_by != 'days'}month{else}day{/if}{else}{$scale} {if $group_by != 'days'}months{else}days{/if}{/if}"
+    //);
+    
+    //console.log({json_encode($chart_data['count'])});
+    
+    $.jqplot("reports-orders-graph", [{json_encode($chart_data['sales'])}, {json_encode($chart_data['count'])}], {
+        seriesColors : ["#3b7dc0", "#129d0e", "#a38717", "#ac3562", "#1ba17a", "#87469f", "#6b6b6b", "#686190", "#b2b000", "#00b1ab", "#76b300"],
+        series : [
+            {
+                color : '#a38717',
+                yaxis : 'yaxis',
+                shadow : false,
+                lineWidth : 3,
+                fill : true,
+                fillAlpha : 0.1,
+                fillAndStroke : true,
+                rendererOptions : {
+                    highlightMouseOver : false,
+                },
+                label : '{_wp("Money")|escape:'javascript'}'
+            },
+            {
+                color : '#129d0e',
+                yaxis : 'y2axis',
+                shadow : false,
+                lineWidth : 3,
+                fill : true,
+                fillAlpha : 0.1,
+                fillAndStroke : true,
+                rendererOptions : {
+                    highlightMouseOver : false,
+                },
+                label : '{_wp("Quantity")|escape:'javascript'}'
+            },
+        ],
+        axes:{
+            xaxis:{
+                renderer: $.jqplot.DateAxisRenderer,
+                showTickMarks: false,
+                tickOptions:{
+                    formatString: {if $group_by == 'days'}0{else}1{/if} ? '%b %Y' : '%b %d'
+                },
+                tickInterval: "{if $cnt <= 35}1 {if $group_by != 'days'}month{else}day{/if}{else}{$scale} {if $group_by != 'days'}months{else}days{/if}{/if}"
+            },
+            yaxis:{
+                min: 0,
+                showTicks: false,
+                showTickMarks: false,
+                tickOptions:{
+                    formatString:'%0.2f'
+                }
+            },
+            y2axis:{
+                min: 0,
+                showTicks: false,
+                showTickMarks: false,
+                tickOptions:{
+                    formatString:'%d'
+                }
+            }
+        },
+        highlighter: {
+            show: true,
+            sizeAdjust: 7.5
+        },
+        cursor: {
+            show: false
+        },
+        grid : {
+            borderWidth : 1,
+            background : '#ffffff',
+            gridLineColor : '#eeeeee'
+        },
+        legend:{
+            show: true,
+            location: "ne"
+        },
+        title: "{_wp("Orders")|escape:'javascript'}"
+    });
     
     var dow_orders;
     dow_orders = [{foreach $stats.dow.data as $dow}{$dow.count}{if !$dow@last},{/if}{/foreach}];
-    
-    console.log([dow_orders]);
     
     $.jqplot("reports-dow-orders", [dow_orders], {
         seriesDefaults: {

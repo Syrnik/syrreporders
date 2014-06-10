@@ -37,9 +37,6 @@ class shopSyrreporderspluginorderModel extends shopOrderModel
                 WHERE {$create_date_sql}
                 GROUP BY {$date_col}";
 
-        waLog::log("Conditions: " . json_encode($conditions), "report.log");
-        waLog::log("SQL: $sql", "report.log");
-        
         // All rows from DB
         $min_date = null;
         $result = array(); // YYYY-MM-DD => array(...)
@@ -83,7 +80,7 @@ class shopSyrreporderspluginorderModel extends shopOrderModel
         $conditions = array_merge($defaults, $conditions);
         $create_date_sql = self::getDateSql('o.create_datetime', $conditions['start_date'], $conditions['end_date']);
         
-        $sql = "SELECT WEEKDAY(o.create_datetime) AS dow, SUM(o.total*o.rate) AS total, COUNT(*) AS `count` "
+        $sql = "SELECT WEEKDAY(o.create_datetime) AS dow, AVG(o.total*o.rate) AS total, COUNT(*) AS `count` "
                 . "FROM {$this->table} o "
                 . "WHERE $create_date_sql "
                 . "GROUP BY WEEKDAY(o.create_datetime) "
@@ -101,4 +98,27 @@ class shopSyrreporderspluginorderModel extends shopOrderModel
         
         return $result;
     }
+    
+    private function countDays($day, $start, $end)
+    {        
+        
+        //get the day of the week for start and end dates (0-6)
+        $w = array(date('w', $start), date('w', $end));
+
+        //get partial week day count
+        if ($w[0] < $w[1])
+        {            
+            $partialWeekCount = ($day >= $w[0] && $day <= $w[1]);
+        }else if ($w[0] == $w[1])
+        {
+            $partialWeekCount = $w[0] == $day;
+        }else
+        {
+            $partialWeekCount = ($day >= $w[0] || $day <= $w[1]);
+        }
+
+        //first count the number of complete weeks, then add 1 if $day falls in a partial week.
+        return floor( ( $end-$start )/60/60/24/7) + $partialWeekCount;
+    }
+
 }

@@ -69,3 +69,15 @@ msgstr ""
 #: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:15
 msgid "Max total amount"
 msgstr ""
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:59
+msgid "Money"
+msgstr ""
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:72
+msgid "Quantity"
+msgstr ""
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:117
+msgid "Orders"
+msgstr ""

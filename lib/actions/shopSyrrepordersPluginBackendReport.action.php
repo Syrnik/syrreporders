@@ -19,6 +19,7 @@ class shopSyrrepordersPluginBackendReportAction extends waViewAction
         $Order = new shopSyrreporderspluginorderModel();
         $default_currency = wa()->getConfig()->getCurrency();
         $max_sales = 0;
+        $max_orders = 0;
         
         $sales = $Order->getOrderStats($timeframe);
         
@@ -48,16 +49,18 @@ class shopSyrrepordersPluginBackendReportAction extends waViewAction
         
         foreach($sales as $row) {
             $max_sales = max($max_sales, (float)$row['total']);
+            $max_orders = max($max_orders, (float)$row['count']);
         }
         
         $chart_data = array();
         
         foreach($sales as $k=>$row) {
             $sales[$k]['total_percent'] = $max_sales ? ($row['total']*100 / ifempty($max_sales, 1)) : 0;
-            $chart_data[] = array($row['date'], $row['total']);
+            $sales_data[] = array($row['date'], (float)$row['total']);
+            $count_data[] = array($row['date'], (float)$row['count']);
         }
         
-        $this->view->assign('chart_data', $chart_data);
+        $this->view->assign('chart_data', array('sales'=>$sales_data, 'count'=>$count_data));
         $this->view->assign('group_by', $timeframe['group']);
         $this->view->assign('stats', $stats);
     }
