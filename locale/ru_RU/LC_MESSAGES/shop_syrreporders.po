@@ -83,3 +83,62 @@ msgstr "Количество"
 #: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:117
 msgid "Orders"
 msgstr "Заказы"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:207
+msgid "Shipping"
+msgstr "Доставка"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:10
+msgid "Chart settings"
+msgstr "Настройки графика"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:20
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:105
+msgid "Number of orders"
+msgstr "Количество заказов"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:31
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:108
+msgid "Totals"
+msgstr "Общий итог"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:37
+msgid "Orders Products Sum"
+msgstr ""
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:43
+msgid "Orders Purcahase Sum"
+msgstr ""
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:49
+msgid "Orders Services Sum"
+msgstr ""
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:55
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:111
+msgid "Shipping Total"
+msgstr "Сумма доставки"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:61
+msgid "Discount Total"
+msgstr "Сумма скидок"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:67
+msgid "Tax Total"
+msgstr "Сумма налогов"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:99
+msgid "Month"
+msgstr "Месяц"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:101
+msgid "Date"
+msgstr "Дата"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:114
+msgid "Discounts Total"
+msgstr "Сумма скидок"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:117
+msgid "Taxes Total"
+msgstr "Сумма налогов"
