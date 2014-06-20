@@ -4,7 +4,7 @@ return array(
     'name' => 'Orders Report',
     'description' => 'Statistics on orders',
     'vendor'=>670917,
-    'version'=>'1.0.0',
+    'version'=>'1.1.0',
     'shop_settings' => FALSE,
     'frontend'    => FALSE,
     'icons'=>array(
