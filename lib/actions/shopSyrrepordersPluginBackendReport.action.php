@@ -53,14 +53,25 @@ class shopSyrrepordersPluginBackendReportAction extends waViewAction
         }
         
         $chart_data = array();
-        
+//        var_dump($sales);
         foreach($sales as $k=>$row) {
             $sales[$k]['total_percent'] = $max_sales ? ($row['total']*100 / ifempty($max_sales, 1)) : 0;
             $sales_data[] = array($row['date'], (float)$row['total']);
             $count_data[] = array($row['date'], (float)$row['count']);
+            $shipping_data[] = array($row['date'], (float)$row['shipping']);
+            $discount_data[] = array($row['date'], (float)$row['discount']);
+            $tax_data[] = array($row['date'], (float)$row['tax']);
         }
         
-        $this->view->assign('chart_data', array('sales'=>$sales_data, 'count'=>$count_data));
+        $this->view->assign('chart_data', array(
+            'sales'=>$sales_data,
+            'count'=>$count_data,
+            'shipping'=>$shipping_data,
+            'discount'=>$discount_data,
+            'tax'=>$tax_data,
+            ));
+        $this->view->assign('currency', $default_currency);
+        $this->view->assign('table_data', $sales);
         $this->view->assign('group_by', $timeframe['group']);
         $this->view->assign('stats', $stats);
     }

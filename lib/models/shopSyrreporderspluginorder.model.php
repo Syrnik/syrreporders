@@ -32,6 +32,9 @@ class shopSyrreporderspluginorderModel extends shopOrderModel
         $sql = "SELECT
                     {$date_col} AS `date`,
                     SUM(o.total*o.rate) AS total,
+                    SUM(o.shipping*o.rate) AS shipping,
+                    SUM(o.discount*o.rate) AS discount,
+                    SUM(o.tax*o.rate) AS tax,
                     COUNT(*) AS `count`
                 FROM {$this->table} o
                 WHERE {$create_date_sql}
@@ -65,6 +68,9 @@ class shopSyrreporderspluginorderModel extends shopOrderModel
                     'date' => $date,
                     'total' => 0,
                     'count' => 0,
+                    'shipping' => 0,
+                    'discount' => 0,
+                    'tax' => 0
                 );
             }
             $result[$date]['total'] = (float) $result[$date]['total'];
