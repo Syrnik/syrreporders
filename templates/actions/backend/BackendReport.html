@@ -1,4 +1,3 @@
-{$weekdays_for_best = [_wp("Monday"), _wp("Tuesday"), _wp("Wednesday"), _wp("Thursday"), _wp("Friday"), _wp("Saturday"), _wp("Sunday")]}
 <div class="block double-padded">
     <div class="content">
         <div id="reports-orders-graph" class="s-graph"></div>
@@ -72,25 +71,9 @@
                         </form>
                     </div>
                 </div>
-                {*
-                <h2>{_wp("Best Weekdays")}</h2>
-                <div class="fields">
-                    <div class="field-group">
-                        <div class="field">
-                            <div class="name">{_wp('Max number of orders')}</div>
-                            <div class="value">{foreach $stats.dow.top.count as $dow}{if !$dow@first}, {/if}{$weekdays_for_best[$dow.dow]}{/foreach}</div>
-                        </div>
-                        <div class="field">
-                            <div class="name">{_wp('Max total amount')}</div>
-                            <div class="value">{foreach $stats.dow.top.sum as $dow}{if !$dow@first}, {/if}{$weekdays_for_best[$dow.dow]}{/foreach}</div>
-                        </div>
-                    </div>
-                </div>
-                *}
             </div>
             <div class="content left400px">
                 <div class="padded">
-                {*<div id="reports-dow-orders" class="s-graph"></div>*}
                     <table class="zebra">
                         <thead>
                             <tr>
@@ -154,7 +137,6 @@
 //        "{if $cnt <= 35}1 {if $group_by != 'days'}month{else}day{/if}{else}{$scale} {if $group_by != 'days'}months{else}days{/if}{/if}"
 //    );
     
-    //console.log({json_encode($chart_data['count'])});
     
     var ordersReportPlot = $.jqplot("reports-orders-graph",
         [
