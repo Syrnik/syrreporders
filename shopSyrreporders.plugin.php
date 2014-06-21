@@ -22,6 +22,8 @@ class shopSyrrepordersPlugin extends shopPlugin
     public function backendReports()
     {
         $view = wa()->getView();
+        $settings = $this->getSettings();
+        $view->assign('settings', $settings);
         $content = $view->fetch($this->path . "/templates/menuitem.html");
         wa()->getResponse()
                 ->addJs('wa-content/js/jquery-plugins/jquery-plot//plugins/jqplot.barRenderer.min.js')

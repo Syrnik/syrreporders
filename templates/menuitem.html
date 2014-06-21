@@ -1,8 +1,20 @@
-<li><a href="#/syrorders/">{_wp('Order Report')}</a></li>
+{if isset($settings["report_orders"]) and $settings.report_orders}
+<li><a href="#/syrorders/">{_wp('Orders')}</a></li>
+{/if}
+{if isset($settings["report_weekdays"]) and $settings.report_weekdays}
+<li><a href="#/syrweekdays/">{_wp('Weekdays')}</a></li>
+{/if}
 <script type="text/javascript">
     $(function(){
+{if isset($settings["report_orders"]) and $settings.report_orders}
         $.reports.syrordersAction = function(){
             $("#reportscontent").load("?plugin=syrreporders&action=report"+this.getTimeframeParams());
         };
+{/if}
+{if isset($settings["report_weekdays"]) and $settings.report_weekdays}
+        $.reports.syrweekdaysAction = function(){
+            $("#reportscontent").load("?plugin=syrreporders&action=reportweekdays"+this.getTimeframeParams());
+        };
+{/if}
     });
 </script>

@@ -1,11 +1,11 @@
 <?php
 
 return array(
-    'name' => 'Orders Report',
-    'description' => 'Statistics on orders',
+    'name' => 'Additional Reports',
+    'description' => 'More reports',
     'vendor'=>670917,
-    'version'=>'1.1.0',
-    'shop_settings' => FALSE,
+    'version'=>'1.2.0',
+    'shop_settings' => TRUE,
     'frontend'    => FALSE,
     'icons'=>array(
         16 => 'img/actions-office-chart-line-percentage-icon.png'
