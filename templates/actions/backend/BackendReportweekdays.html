@@ -1,0 +1,133 @@
+{$weekdays_for_best = [_wp("Monday"), _wp("Tuesday"), _wp("Wednesday"), _wp("Thursday"), _wp("Friday"), _wp("Saturday"), _wp("Sunday")]}
+<div class="block double-padded">
+    <div class="content">
+        <h1>{_wp("Days of week")}</h1>
+        <div id="reports-dow-orders" class="s-graph"></div>
+        <div class="block">
+            <div class="sidebar left400px">
+                <div id="reports-weekdays-controls" class="block double-padded" style="padding-top: 0">
+                    <div style="border:1px solid #ccc; border-radius: 4px;-webkit-box-shadow: 3px 3px 3px 0 #bbb;box-shadow: 3px 3px 3px 0 #bbb;" class="block padded">
+                        <h2>{_wp("Best Weekdays")}</h2>
+                        <div class="fields">
+                            <div class="field-group">
+                                <div class="field">
+                                    <div class="name">{_wp('Max number of orders')}</div>
+                                    <div class="value">
+                                    {foreach $stats.dow.top.count as $dow}
+                                    {if !$dow@first}, {/if}
+                                    {$weekdays_for_best[$dow.dow]}
+                                    {/foreach}
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="name">{_wp('Max total amount')}</div>
+                                    <div class="value">
+                                    {foreach $stats.dow.top.sum as $dow}
+                                    {if !$dow@first}, {/if}
+                                    {$weekdays_for_best[$dow.dow]}
+                                    {/foreach}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clear-both"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="content left400px">
+                <div class="block padded" style="padding-top: 0">
+                    <table class="zebra">
+                        <thead>
+                            <tr>
+                                <th>{_wp("Day of week")}</th>
+                                <th>{_wp("Number of orders")}</th>
+                                <th>{_wp("Order Totals")}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {foreach $stats.dow.data as $row}
+                                <tr>
+                                    <td>{$weekdays_for_best[$row.dow]}</td>
+                                    <td>{$row.count}</td>
+                                    <td>{$row.total|wa_format_amount_currency:$currency}</td>
+                                </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">(function() {
+
+    document.title = '{_wp("Weekdays")|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}';
+    
+    $.jqplot("reports-dow-orders", [
+        [{foreach $stats.dow.data as $dow}{$dow.total}{if !$dow@last},{/if}{/foreach}],
+        [{foreach $stats.dow.data as $dow}{$dow.count}{if !$dow@last},{/if}{/foreach}]
+    ],
+    {
+        animate: true,
+        seriesColors : ["#129d0e", "#3b7dc0", "#a38717", "#ac3562", "#1ba17a", "#87469f", "#6b6b6b", "#686190", "#b2b000", "#00b1ab", "#76b300"],
+        seriesDefaults: {
+            renderer: $.jqplot.BarRenderer,
+            rendererOptions: {
+                fillToZero: true,
+                highlightMouseOver: false
+            },
+            pointLabels: {
+                show: false
+            },
+        },
+        series: [
+            {
+                yaxis: "yaxis"
+            },
+            {
+                yaxis: "y2axis"
+            }
+        ],
+        grid: {
+            shadow: false,
+            background: "#ffffff",
+            gridLineColor: "#eeeeee",
+            borderWidth: 0
+        },
+        axes: {
+            xaxis: {
+                renderer: $.jqplot.CategoryAxisRenderer,
+                ticks: [ "{_wp("Monday")|escape:"javascript"}", "{_wp("Tuesday")|escape:"javascript"}", "{_wp("Wednesday")|escape:"javascript"}", "{_wp("Thursday")|escape:"javascript"}", "{_wp("Friday")|escape:"javascript"}", "{_wp("Saturday")|escape:"javascript"}", "{_wp("Sunday")|escape:"javascript"}" ]
+            },
+            yaxis:{
+                min: 0,
+                showTicks: true,
+                showTickMarks: true,
+                tickOptions:{
+                    {if $currency eq 'RUB'}
+                        formatString:'%.2f руб.'
+                    {elseif $currency eq 'USD'}
+                        formatString:'$%.2f'
+                    {elseif $currency eq 'EUR'}
+                        formatString:'€%.2f'
+                    {elseif $currency eq 'UAH'}
+                        formatString:'%.2f грн.'
+                    {else}
+                        formatString:'%.2f'
+                    {/if}
+                }
+            },
+            y2axis: {
+                tickOptions: { formatString: '%d' },
+                showTicks: true,
+                showTickMarks: true,
+                min: 0
+            }
+        },
+        cursor: {
+            show: false
+        },
+        title: '{_wp("Orders by Weekdays")|escape:"javascript"}'
+    });
+})();</script>
+

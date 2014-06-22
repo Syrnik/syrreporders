@@ -140,3 +140,45 @@ msgstr ""
 #: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:117
 msgid "Taxes Total"
 msgstr ""
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReportweekdays.html:4
+msgid "Days of week"
+msgstr ""
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReportweekdays.html:42
+msgid "Day of week"
+msgstr ""
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReportweekdays.html:44
+msgid "Order Totals"
+msgstr ""
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReportweekdays.html:64
+#: /wa-apps/shop/plugins/syrreporders/templates/menuitem.html:5
+msgid "Weekdays"
+msgstr ""
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/settings/Settings.html:2
+msgid "Additional Reports"
+msgstr ""
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/settings/Settings.html:8
+msgid "Reports"
+msgstr ""
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/settings/Settings.html:9
+msgid "Select the reports you need"
+msgstr ""
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/settings/Settings.html:28
+msgid "Weekdays Statistic"
+msgstr ""
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/settings/Settings.html:34
+msgid "Save"
+msgstr ""
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/settings/Settings.html:36
+#: /wa-apps/shop/plugins/syrreporders/lib/actions/shopSyrrepordersPluginBackendSave.controller.php:26
+msgid "Saved"
+msgstr ""

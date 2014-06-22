@@ -104,15 +104,15 @@ msgstr "Общий итог"
 
 #: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:37
 msgid "Orders Products Sum"
-msgstr ""
+msgstr "Суммарная стоимость товаров"
 
 #: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:43
 msgid "Orders Purcahase Sum"
-msgstr ""
+msgstr "Сумма расходов на закупку"
 
 #: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:49
 msgid "Orders Services Sum"
-msgstr ""
+msgstr "Сумма услуг"
 
 #: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:55
 #: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:111
@@ -142,3 +142,45 @@ msgstr "Сумма скидок"
 #: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:117
 msgid "Taxes Total"
 msgstr "Сумма налогов"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReportweekdays.html:4
+msgid "Days of week"
+msgstr "Дни недели"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReportweekdays.html:42
+msgid "Day of week"
+msgstr "День недели"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReportweekdays.html:44
+msgid "Order Totals"
+msgstr "Общая сумма заказов"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReportweekdays.html:64
+#: /wa-apps/shop/plugins/syrreporders/templates/menuitem.html:5
+msgid "Weekdays"
+msgstr "Дни недели"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/settings/Settings.html:2
+msgid "Additional Reports"
+msgstr "Дополнительные отчеты"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/settings/Settings.html:8
+msgid "Reports"
+msgstr "Отчеты"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/settings/Settings.html:9
+msgid "Select the reports you need"
+msgstr "Выберите нужные отчеты"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/settings/Settings.html:28
+msgid "Weekdays Statistic"
+msgstr "Статистика по дням недели"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/settings/Settings.html:34
+msgid "Save"
+msgstr "Сохранить"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/settings/Settings.html:36
+#: /wa-apps/shop/plugins/syrreporders/lib/actions/shopSyrrepordersPluginBackendSave.controller.php:26
+msgid "Saved"
+msgstr "Сохранено"
