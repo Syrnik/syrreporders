@@ -86,12 +86,19 @@ class shopSyrreporderspluginorderModel extends shopOrderModel
         $conditions = array_merge($defaults, $conditions);
         $create_date_sql = self::getDateSql('o.create_datetime', $conditions['start_date'], $conditions['end_date']);
         
-        $sql = "SELECT WEEKDAY(o.create_datetime) AS dow, AVG(o.total*o.rate) AS total, COUNT(*) AS `count` "
-                . "FROM {$this->table} o "
+
+        $sql = "SELECT `dow`, AVG(`order_count`) AS `count`, AVG(`order_total`) AS `total` "
+                . "FROM ( "
+                . "SELECT WEEKDAY(create_datetime) AS dow,"
+                . "COUNT(*) as `order_count`,"
+                . "SUM(total*rate) AS `order_total` "
+                . "FROM `{$this->table}` o "
                 . "WHERE $create_date_sql "
-                . "GROUP BY WEEKDAY(o.create_datetime) "
-                . "ORDER BY dow";
-        
+                . "GROUP BY create_datetime"
+                . ") AS temp "
+                . "GROUP BY `dow` "
+                . "ORDER BY `dow`";
+
         $result = $this->query($sql)->fetchAll('dow');
         
         for($i=0;$i<7;$i++) {

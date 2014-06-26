@@ -184,3 +184,11 @@ msgstr "Сохранить"
 #: /wa-apps/shop/plugins/syrreporders/lib/actions/shopSyrrepordersPluginBackendSave.controller.php:26
 msgid "Saved"
 msgstr "Сохранено"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReportweekdays.html:43
+msgid "Average sales"
+msgstr "Среднее число продаж"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReportweekdays.html:44
+msgid "Average ticket price"
+msgstr "Средний чек"

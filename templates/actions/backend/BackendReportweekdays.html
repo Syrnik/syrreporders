@@ -40,8 +40,8 @@
                         <thead>
                             <tr>
                                 <th>{_wp("Day of week")}</th>
-                                <th>{_wp("Number of orders")}</th>
-                                <th>{_wp("Order Totals")}</th>
+                                <th>{_wp("Average sales")}</th>
+                                <th>{_wp("Average ticket price")}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -103,7 +103,7 @@
                 min: 0,
                 showTicks: true,
                 showTickMarks: true,
-                tickOptions:{
+                tickOptions:{                                                                                                                                                                                                                                                                                   
                     {if $currency eq 'RUB'}
                         formatString:'%.2f руб.'
                     {elseif $currency eq 'USD'}
@@ -119,8 +119,8 @@
             },
             y2axis: {
                 tickOptions: { formatString: '%d' },
-                showTicks: true,
-                showTickMarks: true,
+                showTicks: false,
+                showTickMarks: false                                                                                                                                                                                                                                                                                ,
                 min: 0
             }
         },
