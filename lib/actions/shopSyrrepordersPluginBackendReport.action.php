@@ -13,15 +13,17 @@
  */
 class shopSyrrepordersPluginBackendReportAction extends waViewAction
 {
+    /** @var shopSyrreporderspluginorderModel Orders Model extended for plugin */
+    protected $Order;
+    
     public function execute()
     {
         $timeframe = array_combine(array('start_date', 'end_date', 'group'), shopReportsSalesAction::getTimeframeParams());
-        $Order = new shopSyrreporderspluginorderModel();
         $default_currency = wa()->getConfig()->getCurrency();
         $max_sales = 0;
         $max_orders = 0;
 
-        $sales = $Order->getOrderStats($timeframe);
+        $sales = $this->Order->getOrderStats($timeframe);
 
         foreach($sales as $row) {
             $max_sales = max($max_sales, (float)$row['total']);
@@ -49,5 +51,11 @@ class shopSyrrepordersPluginBackendReportAction extends waViewAction
         $this->view->assign('currency', $default_currency);
         $this->view->assign('table_data', $sales);
         $this->view->assign('group_by', $timeframe['group']);
+    }
+    
+    protected function preExecute()
+    {
+        $this->Order = new shopSyrreporderspluginorderModel();
+        parent::preExecute();
     }
 }
