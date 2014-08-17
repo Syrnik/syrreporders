@@ -26,9 +26,9 @@ class shopSyrrepordersPlugin extends shopPlugin
         $view->assign('settings', $settings);
         $content = $view->fetch($this->path . "/templates/menuitem.html");
         wa()->getResponse()
-                ->addJs('wa-content/js/jquery-plugins/jquery-plot//plugins/jqplot.barRenderer.min.js')
-                ->addJs('wa-content/js/jquery-plugins/jquery-plot//plugins/jqplot.categoryAxisRenderer.min.js')
-                ->addJs('wa-content/js/jquery-plugins/jquery-plot//plugins/jqplot.pointLabels.min.js');
+                ->addJs('wa-content/js/jquery-plugins/jquery-plot/plugins/jqplot.barRenderer.min.js')
+                ->addJs('wa-content/js/jquery-plugins/jquery-plot/plugins/jqplot.categoryAxisRenderer.min.js')
+                ->addJs('wa-content/js/jquery-plugins/jquery-plot/plugins/jqplot.pointLabels.min.js');
         return array('menu_li' => $content);
     }
 
