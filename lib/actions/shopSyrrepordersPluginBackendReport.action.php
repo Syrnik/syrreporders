@@ -13,8 +13,6 @@
  */
 class shopSyrrepordersPluginBackendReportAction extends waViewAction
 {
-    /** @var shopSyrreporderspluginorderModel Orders Model extended for plugin */
-    protected $Order;
     
     public function execute()
     {
@@ -23,7 +21,8 @@ class shopSyrrepordersPluginBackendReportAction extends waViewAction
         $max_sales = 0;
         $max_orders = 0;
 
-        $sales = $this->Order->getOrderStats($timeframe);
+        $Order = new shopSyrreporderspluginorderModel();
+        $sales = $Order->getOrderStats($timeframe);
 
         foreach($sales as $row) {
             $max_sales = max($max_sales, (float)$row['total']);
@@ -53,9 +52,4 @@ class shopSyrrepordersPluginBackendReportAction extends waViewAction
         $this->view->assign('group_by', $timeframe['group']);
     }
     
-    protected function preExecute()
-    {
-        $this->Order = new shopSyrreporderspluginorderModel();
-        parent::preExecute();
-    }
 }
