@@ -17,7 +17,7 @@
                                     <div class="value">
                                         <input type="hidden" name="orders_graph[count]" value="0">
                                         <label>
-                                            <input type="checkbox" name="orders_graph[count]" data-serie="0" data-column="count" checked="checked" value="1">
+                                            <input type="checkbox" name="orders_graph[count]" data-serie="0" data-column="count"{if $orders_graph['count']} checked="checked"{/if} value="1">
                                             <span style="color:#3b7dc0">{_wp('Number of orders')}</span>
                                         </label>
                                     </div>
@@ -29,7 +29,7 @@
                                     <div class="value">
                                         <input type="hidden" name="orders_graph[totals]" value="0">
                                         <label>
-                                            <input type="checkbox" name="orders_graph[totals]" data-serie="1" checked="checked" data-column="totals" value="1">
+                                            <input type="checkbox" name="orders_graph[totals]" data-serie="1"{if $orders_graph['totals']} checked="checked"{/if} data-column="totals" value="1">
                                             <span style="color:#129d0e">{_wp('Totals')}</span>
                                         </label>
                                     </div>
@@ -54,21 +54,21 @@
                                     <div class="value">
                                         <input type="hidden" name="orders_graph[shipping]" value="0">
                                         <label>
-                                            <input type="checkbox" name="orders_graph[shipping]" data-serie="2" checked="checked" data-column="shipping" value="1">
+                                            <input type="checkbox" name="orders_graph[shipping]" data-serie="2"{if $orders_graph['shipping']} checked="checked"{/if} data-column="shipping" value="1">
                                             <span style="color:#a38717">{_wp('Shipping Total')}</span>
                                         </label>
                                     </div>
                                     <div class="value">
                                         <input type="hidden" name="orders_graph[discount]" value="0">
                                         <label>
-                                            <input type="checkbox" name="orders_graph[discount]" data-serie="3" checked="checked" data-column="discount" value="1">
+                                            <input type="checkbox" name="orders_graph[discount]" data-serie="3"{if $orders_graph['discount']} checked="checked"{/if} data-column="discount" value="1">
                                             <span style="color:#ac3562">{_wp('Discount Total')}</span>
                                         </label>
                                     </div>
                                     <div class="value">
                                         <input type="hidden" name="orders_graph[tax]" value="0">
                                         <label>
-                                            <input type="checkbox" name="orders_graph[tax]" data-serie="4" checked="checked" data-column="tax" value="1">
+                                            <input type="checkbox" name="orders_graph[tax]" data-serie="4"{if $orders_graph['tax']} checked="checked"{/if} data-column="tax" value="1">
                                             <span style="color:#1ba17a">{_wp('Tax Total')}</span>
                                         </label>
                                     </div>
@@ -90,19 +90,19 @@
                                         {_wp('Date')}
                                     {/if}
                                 </th>
-                                <th style="text-align: center" class="col-count">
+                                <th style="text-align: center;{if not $orders_graph['count']} display:none;{/if}" class="col-count">
                                     {_wp('Number of orders')}
                                 </th>
-                                <th style="text-align: center" class="col-totals">
+                                <th style="text-align: center;{if not $orders_graph['totals']} display:none;{/if}" class="col-totals">
                                     {_wp('Totals')}
                                 </th>
-                                <th style="text-align: center" class="col-shipping">
+                                <th style="text-align: center;{if not $orders_graph['shipping']} display:none;{/if}" class="col-shipping">
                                     {_wp('Shipping Total')}
                                 </th>
-                                <th style="text-align: center" class="col-discount">
+                                <th style="text-align: center;{if not $orders_graph['discount']} display:none;{/if}" class="col-discount">
                                     {_wp('Discounts Total')}
                                 </th>
-                                <th style="text-align: center" class="col-tax">
+                                <th style="text-align: center;{if not $orders_graph['tax']} display:none;{/if}" class="col-tax">
                                     {_wp('Taxes Total')}
                                 </th>
                             </tr>
@@ -112,11 +112,11 @@
                                 {if $row['count'] > 0}
                                     <tr>
                                         <td>{$row['date']|wa_date}</td>
-                                        <td style="text-align: right" class="col-count">{$row['count']}</td>
-                                        <td style="text-align: right" class="col-totals">{$row['total']|wa_format_amount_currency:$currency}</td>
-                                        <td style="text-align: right" class="col-shipping">{$row['shipping']|wa_format_amount_currency:$currency}</td>
-                                        <td style="text-align: right" class="col-discount">{$row['discount']|wa_format_amount_currency:$currency}</td>
-                                        <td style="text-align: right" class="col-tax">{$row['tax']|wa_format_amount_currency:$currency}</td>
+                                        <td style="text-align: right;{if not $orders_graph['count']}display:none;{/if}" class="col-count">{$row['count']}</td>
+                                        <td style="text-align: right;{if not $orders_graph['totals']} display:none;{/if}" class="col-totals">{$row['total']|wa_format_amount_currency:$currency}</td>
+                                        <td style="text-align: right;{if not $orders_graph['shipping']} display:none;{/if}" class="col-shipping">{$row['shipping']|wa_format_amount_currency:$currency}</td>
+                                        <td style="text-align: right;{if not $orders_graph['discount']} display:none;{/if}" class="col-discount">{$row['discount']|wa_format_amount_currency:$currency}</td>
+                                        <td style="text-align: right;{if not $orders_graph['tax']} display:none;{/if}" class="col-tax">{$row['tax']|wa_format_amount_currency:$currency}</td>
                                     </tr>
                                 {/if}
                             {/foreach}
@@ -131,7 +131,8 @@
 </div>
 <div class="clear-both"></div>
 
-<script type="text/javascript">(function() {
+<script type="text/javascript">
+(function() {
 
     document.title = '{_wp("Order Report")|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}';
     
@@ -251,38 +252,14 @@
         title: "{_wp("Orders")|escape:'javascript'}"
     });
 
-/*
-    var dow_orders;
-    dow_orders = [{foreach $stats.dow.data as $dow}{$dow.count}{if !$dow@last},{/if}{/foreach}];
-    
-    $.jqplot("reports-dow-orders", [dow_orders], {
-        seriesDefaults: {
-            renderer: $.jqplot.BarRenderer,
-            rendererOptions: { fillToZero: true },
-            pointLabels: {
-                show: true
-            }
-        },
-       grid: {
-            shadow: true
-        },
-        axes: {
-            xaxis: {
-                renderer: $.jqplot.CategoryAxisRenderer,
-                ticks: [ "{_wp("Monday")|escape:"javascript"}", "{_wp("Tuesday")|escape:"javascript"}", "{_wp("Wednesday")|escape:"javascript"}", "{_wp("Thursday")|escape:"javascript"}", "{_wp("Friday")|escape:"javascript"}", "{_wp("Saturday")|escape:"javascript"}", "{_wp("Sunday")|escape:"javascript"}" ]
-            },
-            yaxis: {
-                tickOptions: { formatString: '%d' },
-                min: 0
-            }
-        },
-        cursor: {
-            show: false
-        },
-        title: '{_wp("Orders by Weekdays")|escape:"javascript"}'
+    $("#syrRepOrdersSettingsForm input[type=checkbox]").each(function(i){
+        if(!$(this).is(":checked")){
+            serie = parseInt($(this).data("serie"));
+            ordersReportPlot.series[serie].show = false;
+        }
     });
-*/   
-   
+    ordersReportPlot.redraw(false);
+
     $("#reports-orders-controls").on("change", "input[type=checkbox]", function(){
        
         data = $("#syrRepOrdersSettingsForm").serialize();
@@ -292,21 +269,23 @@
         columnClass = $(this).data("column");
         checked = $(this).is(":checked");
        
-        $.post("?plugin=syrreporders&action=setreppref", data, function(){
-            
-            if(checked) {
-                ordersReportPlot.series[serie].show = true;
-                $("#syrRepOrdersTableValues .col-"+columnClass).show();
+        $.post("?plugin=syrreporders&action=setreppref", data, function(r){
+            if(r.status == 'ok') {
+                if(checked) {
+                    ordersReportPlot.series[serie].show = true;
+                    $("#syrRepOrdersTableValues .col-"+columnClass).show();
+                } else {
+                    ordersReportPlot.series[serie].show = false;
+                    $("#syrRepOrdersTableValues .col-"+columnClass).hide();
+                }
+                ordersReportPlot.redraw(false);
             } else {
-                ordersReportPlot.series[serie].show = false;
-                $("#syrRepOrdersTableValues .col-"+columnClass).hide();
+                
             }
-            
-            ordersReportPlot.redraw(false);
         })
-            .always(function(){
-               $("#reports-orders-controls input[type=checkbox]").removeAttr("readonly");
-            });
+        .always(function(){
+            $("#reports-orders-controls input[type=checkbox]").removeAttr("readonly");
+        });
     });
 })();</script>
 
