@@ -7,15 +7,17 @@
                 <div id="reports-orders-controls" class="block double-padded" style="padding-top: 0">
                     <div style="border:1px solid #ccc; border-radius: 4px;-webkit-box-shadow: 3px 3px 3px 0 #bbb;box-shadow: 3px 3px 3px 0 #bbb;" class="block padded">
                         <h2>{_wp('Chart settings')}</h2>
-                        <form>
+                        <form id="syrRepOrdersSettingsForm">
+                            <input type="hidden" name="report" value="orders">
                             <div class="fields">
                                 <div class="field">
                                     <div class="name">
                                         {_wp("Orders")}
                                     </div>
                                     <div class="value">
+                                        <input type="hidden" name="orders_graph[count]" value="0">
                                         <label>
-                                            <input type="checkbox" name="orders_graph[count]" data-serie="0" checked="checked">
+                                            <input type="checkbox" name="orders_graph[count]" data-serie="0" checked="checked" value="1">
                                             <span style="color:#3b7dc0">{_wp('Number of orders')}</span>
                                         </label>
                                     </div>
@@ -25,8 +27,9 @@
                                         {_wp('Money')}
                                     </div>
                                     <div class="value">
+                                        <input type="hidden" name="orders_graph[totals]" value="0">
                                         <label>
-                                            <input type="checkbox" name="orders_graph[totals]" data-serie="1" checked="checked">
+                                            <input type="checkbox" name="orders_graph[totals]" data-serie="1" checked="checked" value="1">
                                             <span style="color:#129d0e">{_wp('Totals')}</span>
                                         </label>
                                     </div>
@@ -49,20 +52,23 @@
                                         </label>
                                     </div>*}
                                     <div class="value">
+                                        <input type="hidden" name="orders_graph[shipping]" value="0">
                                         <label>
-                                            <input type="checkbox" name="orders_graph[shipping_total]" data-serie="2" checked="checked">
+                                            <input type="checkbox" name="orders_graph[shipping]" data-serie="2" checked="checked" value="1">
                                             <span style="color:#a38717">{_wp('Shipping Total')}</span>
                                         </label>
                                     </div>
                                     <div class="value">
+                                        <input type="hidden" name="orders_graph[discount]" value="0">
                                         <label>
-                                            <input type="checkbox" name="orders_graph[shipping_total]" data-serie="3" checked="checked">
+                                            <input type="checkbox" name="orders_graph[discount]" data-serie="3" checked="checked" value="1">
                                             <span style="color:#ac3562">{_wp('Discount Total')}</span>
                                         </label>
                                     </div>
                                     <div class="value">
+                                        <input type="hidden" name="orders_graph[tax]" value="0">
                                         <label>
-                                            <input type="checkbox" name="orders_graph[shipping_total]" data-serie="4" checked="checked">
+                                            <input type="checkbox" name="orders_graph[tax]" data-serie="4" checked="checked" value="1">
                                             <span style="color:#1ba17a">{_wp('Tax Total')}</span>
                                         </label>
                                     </div>
@@ -286,6 +292,16 @@
            ordersReportPlot.series[serie].show = false;
        }
        ordersReportPlot.redraw(false);
+       
+
+       data = $("#syrRepOrdersSettingsForm").serialize();
+       
+       $("#reports-orders-controls input[type=checkbox]").attr("disabled", "disabled");
+       
+       $.post("?plugin=syrreporders&action=setreppref", data)
+           .always(function(){
+               $("#reports-orders-controls input[type=checkbox]").removeAttr("disabled");
+           });
    });
 })();</script>
 
