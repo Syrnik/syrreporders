@@ -13,7 +13,9 @@
  */
 class shopSyrrepordersPluginBackendReportAction extends waViewAction
 {
-    
+
+    private $default_graphs = array('count'=>1, 'totals'=>1, 'shipping'=>1, 'discount'=>1, 'tax'=>1);
+
     public function execute()
     {
         $timeframe = array_combine(array('start_date', 'end_date', 'group'), shopReportsSalesAction::getTimeframeParams());
@@ -22,6 +24,8 @@ class shopSyrrepordersPluginBackendReportAction extends waViewAction
         $max_orders = 0;
 
         $Order = new shopSyrreporderspluginorderModel();
+        $Setting = new waAppSettingsModel();
+
         $sales = $Order->getOrderStats($timeframe);
 
         foreach($sales as $row) {
@@ -50,6 +54,7 @@ class shopSyrrepordersPluginBackendReportAction extends waViewAction
         $this->view->assign('currency', $default_currency);
         $this->view->assign('table_data', $sales);
         $this->view->assign('group_by', $timeframe['group']);
+        $this->view->assign('orders_graph', unserialize($Setting->get(array('shop', 'syrreporders'), 'orders_graph', serialize($this->default_graphs))));
     }
-    
+
 }
