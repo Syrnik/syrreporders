@@ -29,7 +29,7 @@ class shopSyrreporderspluginorderModel extends shopOrderModel
         $conditions = array_merge($defaults, $conditions);
 
         $date_col = ($conditions['group'] == 'months') ? "DATE_FORMAT(o.create_datetime, '%Y-%m-01')" : 'DATE_FORMAT(o.create_datetime, "%Y-%m-%d")';
-        $create_date_sql = self::getDateSql('o.create_datetime', $conditions['start_date'], $conditions['end_date']);
+        $create_date_sql = self::getDateSql('DATE(`o`.`create_datetime`)', $conditions['start_date'], $conditions['end_date']);
 
         $sql = "SELECT
                     {$date_col} AS `date`,
