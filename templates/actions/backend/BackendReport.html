@@ -151,14 +151,8 @@
     document.title = '{_wp("Order Report")|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}';
     
     {$cnt = count($chart_data['count'])};
-    {$scale = floor($cnt/35) + 1}
-//    $.reports.graph('reports-orders-graph', 
-//        {json_encode($chart_data['count'])}, 
-//        {if $group_by == 'days'}0{else}1{/if},
-//        "{if $cnt <= 35}1 {if $group_by != 'days'}month{else}day{/if}{else}{$scale} {if $group_by != 'days'}months{else}days{/if}{/if}"
-//    );
-    
-    
+    {$scale = floor($cnt/35) + 1}   
+
     var ordersReportPlot = $.jqplot("reports-orders-graph",
         [
             {json_encode($chart_data['count'])},
@@ -167,11 +161,9 @@
             {json_encode($chart_data['discount'])},
             {json_encode($chart_data['tax'])}
         ], {
-//        animate: true,
         seriesColors : ["#3b7dc0", "#129d0e", "#a38717", "#ac3562", "#1ba17a", "#87469f", "#6b6b6b", "#686190", "#b2b000", "#00b1ab", "#76b300"],
         series : [
             {
-//                color : '#129d0e',
                 yaxis : 'y2axis',
                 shadow : false,
                 lineWidth : 3,
@@ -184,7 +176,6 @@
                 label : '{_wp("Quantity")|escape:'javascript'}'
             },
             {
-//                color : '#a38717',
                 yaxis : 'yaxis',
                 shadow : false,
                 lineWidth : 3,
@@ -197,7 +188,6 @@
                 label : '{_wp("Money")|escape:'javascript'}'
             },
             {
-  //              color : '#ac3562',
                 yaxis : 'yaxis',
                 shadow : false,
                 lineWidth : 3,
@@ -261,7 +251,6 @@
         },
         legend:{
             show: false,
-            //location: "ne"
         },
         title: "{_wp("Orders")|escape:'javascript'}"
     });
@@ -302,4 +291,3 @@
         });
     });
 })();</script>
-
