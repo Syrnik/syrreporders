@@ -76,12 +76,13 @@
                                 <div class="field">
                                     <div class="name">
                                         {_wp("Order statuses")}
+                                        <p class="hint">{_wp('Count the statistics for the orders with the specified statuses only')}</p>
                                     </div>
                                     {foreach $orderStates as $os=>$osopts}
                                         <div class="value">
                                             <input type="hidden" name="orders_state[{$os}]" value="0">
                                             <label>
-                                                <input type="checkbox" name="orders_state[{$os}]" value="0">
+                                                <input type="checkbox" name="orders_state[{$os}]" value="0" data-update="1">
                                                 <span style="{foreach $osopts["options"]["style"] as $osstyle=>$osstyleval}{$osstyle}:{$osstyleval};{/foreach}">{$osopts.name}</span>
                                             </label>
                                         </div>
@@ -258,7 +259,7 @@
     $("#syrRepOrdersSettingsForm input[type=checkbox]").each(function(i){
         if(!$(this).is(":checked")){
             serie = parseInt($(this).data("serie"));
-            ordersReportPlot.series[serie].show = false;
+            if(!isNaN(serie)){ ordersReportPlot.series[serie].show = false; }
         }
     });
     ordersReportPlot.redraw(false);
@@ -271,6 +272,7 @@
         serie = parseInt($(this).data("serie"));
         columnClass = $(this).data("column");
         checked = $(this).is(":checked");
+        redrawGraph = parseInt($(this).data("update"));
        
         $.post("?plugin=syrreporders&action=setreppref", data, function(r){
             if(r.status == 'ok') {
