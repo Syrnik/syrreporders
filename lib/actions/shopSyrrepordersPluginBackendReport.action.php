@@ -15,13 +15,10 @@ class shopSyrrepordersPluginBackendReportAction extends waViewAction
 {
 
     private $default_graphs = array('count'=>1, 'totals'=>1, 'shipping'=>1, 'discount'=>1, 'tax'=>1);
-    
-    /** @var array Default order states to display */
-    private $default_orders_states;
 
     public function execute()
     {
-        $timeframe = array_combine(array('start_date', 'end_date', 'group'), shopReportsSalesAction::getTimeframeParams());
+        $conditions = array_combine(array('start_date', 'end_date', 'group'), shopReportsSalesAction::getTimeframeParams());
         $default_currency = wa()->getConfig()->getCurrency();
         $max_sales = 0;
         $max_orders = 0;
@@ -29,7 +26,10 @@ class shopSyrrepordersPluginBackendReportAction extends waViewAction
         $Order = new shopSyrreporderspluginorderModel();
         $Setting = new waAppSettingsModel();
 
-        $sales = $Order->getOrderStats($timeframe);
+        $workflow = shopWorkflow::getConfig();
+        $conditions["orders_states"] = unserialize($Setting->get(array('shop', 'syrreporders'), 'orders_states', serialize(array_keys($workflow["states"]))));
+
+        $sales = $Order->getOrderStats($conditions);
 
         foreach($sales as $row) {
             $max_sales = max($max_sales, (float)$row['total']);
@@ -46,10 +46,6 @@ class shopSyrrepordersPluginBackendReportAction extends waViewAction
             $discount_data[] = array($row['date'], (float)$row['discount']);
             $tax_data[] = array($row['date'], (float)$row['tax']);
         }
-        
-        $wf = shopWorkflow::getConfig();
-
-        $this->default_orders_states = array_keys($wf["states"]);
 
         $this->view->assign('chart_data', array(
             'sales'=>$sales_data,
@@ -60,10 +56,10 @@ class shopSyrrepordersPluginBackendReportAction extends waViewAction
             ));
         $this->view->assign('currency', $default_currency);
         $this->view->assign('table_data', $sales);
-        $this->view->assign('group_by', $timeframe['group']);
+        $this->view->assign('group_by', $conditions['group']);
         $this->view->assign('orders_graph', unserialize($Setting->get(array('shop', 'syrreporders'), 'orders_graph', serialize($this->default_graphs))));
-        $this->view->assign('orders_states', unserialize($Setting->get(array('shop', 'syrreporders'), 'orders_states', serialize($this->default_orders_states))));
-        $this->view->assign('orderStates', $wf['states']);
+        $this->view->assign('orders_states', $conditions["orders_states"]);
+        $this->view->assign('orderStates', $workflow['states']);
     }
 
 }
