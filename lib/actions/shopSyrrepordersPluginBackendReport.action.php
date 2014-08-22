@@ -43,6 +43,9 @@ class shopSyrrepordersPluginBackendReportAction extends waViewAction
             $discount_data[] = array($row['date'], (float)$row['discount']);
             $tax_data[] = array($row['date'], (float)$row['tax']);
         }
+        
+        $wf = shopWorkflow::getConfig();
+//        var_dump($wf['states']['new']);
 
         $this->view->assign('chart_data', array(
             'sales'=>$sales_data,
@@ -55,6 +58,7 @@ class shopSyrrepordersPluginBackendReportAction extends waViewAction
         $this->view->assign('table_data', $sales);
         $this->view->assign('group_by', $timeframe['group']);
         $this->view->assign('orders_graph', unserialize($Setting->get(array('shop', 'syrreporders'), 'orders_graph', serialize($this->default_graphs))));
+        $this->view->assign('orderStates', $wf['states']);
     }
 
 }

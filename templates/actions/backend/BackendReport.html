@@ -73,6 +73,20 @@
                                         </label>
                                     </div>
                                 </div>
+                                <div class="field">
+                                    <div class="name">
+                                        {_wp("Order statuses")}
+                                    </div>
+                                    {foreach $orderStates as $os=>$osopts}
+                                        <div class="value">
+                                            <input type="hidden" name="orders_state[{$os}]" value="0">
+                                            <label>
+                                                <input type="checkbox" name="orders_state[{$os}]" value="0">
+                                                <span style="{foreach $osopts["options"]["style"] as $osstyle=>$osstyleval}{$osstyle}:{$osstyleval};{/foreach}">{$osopts.name}</span>
+                                            </label>
+                                        </div>
+                                    {/foreach}
+                                </div>
                             </div>
                         </form>
                     </div>
