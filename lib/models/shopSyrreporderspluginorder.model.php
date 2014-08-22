@@ -24,12 +24,17 @@ class shopSyrreporderspluginorderModel extends shopOrderModel
      */
     public function getOrderStats(array $conditions=array())
     {
-        $defaults = array('start_date'=>NULL, 'end_date'=>NULL, 'group'=>'days');
+        $defaults = array('start_date'=>NULL, 'end_date'=>NULL, 'group'=>'days', 'orders_states'=>array());
 
         $conditions = array_merge($defaults, $conditions);
 
         $date_col = ($conditions['group'] == 'months') ? "DATE_FORMAT(o.create_datetime, '%Y-%m-01')" : 'DATE_FORMAT(o.create_datetime, "%Y-%m-%d")';
         $create_date_sql = self::getDateSql('DATE(`o`.`create_datetime`)', $conditions['start_date'], $conditions['end_date']);
+        $states_sql = $this->whereOrdersStates('`o`.`state_id`', $conditions['orders_states']);
+
+        if(!empty($states_sql)) {
+            $states_sql = " AND $states_sql";
+        }
 
         $sql = "SELECT
                     {$date_col} AS `date`,
@@ -39,7 +44,7 @@ class shopSyrreporderspluginorderModel extends shopOrderModel
                     SUM(o.tax*o.rate) AS tax,
                     COUNT(*) AS `count`
                 FROM {$this->table} o
-                WHERE {$create_date_sql}
+                WHERE {$create_date_sql}{$states_sql}
                 GROUP BY {$date_col}";
 
         // All rows from DB
@@ -133,6 +138,37 @@ class shopSyrreporderspluginorderModel extends shopOrderModel
 
         //first count the number of complete weeks, then add 1 if $day falls in a partial week.
         return floor( ( $end-$start )/60/60/24/7) + $partialWeekCount;
+    }
+
+    /**
+     *
+     * @param string $field
+     * @param array $states Statuses of orders to count statistics
+     * @return string Part of SQL WHERE condition string
+     */
+    private function whereOrdersStates($field, $states=array())
+    {
+        if(empty($states)) {
+            return '';
+        }
+
+        $workflow = shopWorkflow::getConfig();
+        $all_states = array_keys($workflow["states"]);
+
+        $diff = array_diff($all_states, $states);
+
+        if(empty($diff)) {
+            return '';
+        }
+
+        foreach($states as $k=>$v) {
+            $states[$k] = "'$v'";
+        }
+
+        $w = "$field IN (" . implode(",", $states) .")";
+
+        return $w;
+
     }
 
 }
