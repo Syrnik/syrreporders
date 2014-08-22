@@ -15,6 +15,9 @@ class shopSyrrepordersPluginBackendReportAction extends waViewAction
 {
 
     private $default_graphs = array('count'=>1, 'totals'=>1, 'shipping'=>1, 'discount'=>1, 'tax'=>1);
+    
+    /** @var array Default order states to display */
+    private $default_orders_states;
 
     public function execute()
     {
@@ -45,7 +48,8 @@ class shopSyrrepordersPluginBackendReportAction extends waViewAction
         }
         
         $wf = shopWorkflow::getConfig();
-//        var_dump($wf['states']['new']);
+
+        $this->default_orders_states = array_keys($wf["states"]);
 
         $this->view->assign('chart_data', array(
             'sales'=>$sales_data,
@@ -58,6 +62,7 @@ class shopSyrrepordersPluginBackendReportAction extends waViewAction
         $this->view->assign('table_data', $sales);
         $this->view->assign('group_by', $timeframe['group']);
         $this->view->assign('orders_graph', unserialize($Setting->get(array('shop', 'syrreporders'), 'orders_graph', serialize($this->default_graphs))));
+        $this->view->assign('orders_states', unserialize($Setting->get(array('shop', 'syrreporders'), 'orders_states', serialize($this->default_orders_states))));
         $this->view->assign('orderStates', $wf['states']);
     }
 

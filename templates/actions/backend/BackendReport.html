@@ -1,7 +1,6 @@
 <div class="block double-padded">
     <div class="content">
         <div id="reports-orders-graph" class="s-graph"></div>
-
         <div class="block double-padded">
             <div class="sidebar left400px">
                 <div id="reports-orders-controls" class="block double-padded" style="padding-top: 0">
@@ -82,7 +81,7 @@
                                         <div class="value">
                                             <input type="hidden" name="orders_state[{$os}]" value="0">
                                             <label>
-                                                <input type="checkbox" name="orders_state[{$os}]" value="0" data-update="1">
+                                                <input type="checkbox" name="orders_state[{$os}]" value="0" data-update="1"{if in_array($os, $orders_states)} checked="checked"{/if}>
                                                 <span style="{foreach $osopts["options"]["style"] as $osstyle=>$osstyleval}{$osstyle}:{$osstyleval};{/foreach}">{$osopts.name}</span>
                                             </label>
                                         </div>
