@@ -277,11 +277,15 @@
         $.post("?plugin=syrreporders&action=setreppref", data, function(r){
             if(r.status == 'ok') {
                 if(checked) {
-                    ordersReportPlot.series[serie].show = true;
-                    $("#syrRepOrdersTableValues .col-"+columnClass).show();
+                    if(!isNaN(serie)){
+                        ordersReportPlot.series[serie].show = true;
+                        $("#syrRepOrdersTableValues .col-"+columnClass).show();
+                    }
                 } else {
-                    ordersReportPlot.series[serie].show = false;
-                    $("#syrRepOrdersTableValues .col-"+columnClass).hide();
+                    if(!isNaN(serie)){
+                        ordersReportPlot.series[serie].show = false;
+                        $("#syrRepOrdersTableValues .col-"+columnClass).hide();
+                    }
                 }
                 ordersReportPlot.redraw(false);
             } else {
