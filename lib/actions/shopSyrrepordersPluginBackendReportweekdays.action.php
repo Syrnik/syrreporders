@@ -13,14 +13,30 @@
  */
 class shopSyrrepordersPluginBackendReportweekdaysAction extends waViewAction
 {
+    
+    /** @var shopSyrreporderspluginorderModel */
+    private $Order;
+
+    /** @var waAppSettingsModel */
+    private $Setting;
+
+    public function __construct($params = null)
+    {
+        $this->Order = new shopSyrreporderspluginorderModel();
+        $this->Setting = new waAppSettingsModel();
+        
+        parent::__construct($params);
+    }
     public function execute()
     {
-        $timeframe = array_combine(array('start_date', 'end_date', 'group'), shopReportsSalesAction::getTimeframeParams());
-        $Order = new shopSyrreporderspluginorderModel();
-        $default_currency = wa()->getConfig()->getCurrency();
+        $conditions = array_combine(array('start_date', 'end_date', 'group'), shopReportsSalesAction::getTimeframeParams());
+        $currency = wa()->getConfig()->getCurrency();
+        $workflow = shopWorkflow::getConfig();
+        
+        $conditions["weekdays_states"] = unserialize($this->Setting->get(array('shop', 'syrreporders'), 'weekdays_states', serialize(array_keys($workflow["states"]))));
 
         $stats["dow"] = array(
-            "data" => $Order->getOrderStatsByDow($timeframe),
+            "data" => $this->Order->getOrderStatsByDow($conditions),
             "max_count" => 0,
             "max_sum" => 0,
             "top" => array(
@@ -47,7 +63,9 @@ class shopSyrrepordersPluginBackendReportweekdaysAction extends waViewAction
 
         }
 
-        $this->view->assign('stats', $stats);
-        $this->view->assign('currency', $default_currency);
+        $this->view->assign(compact('stats', 'currency'));
+        $this->view->assign('all_order_states', $workflow['states']);
+        $this->view->assign('weekdays_states', $conditions["weekdays_states"]);
+        
     }
 }

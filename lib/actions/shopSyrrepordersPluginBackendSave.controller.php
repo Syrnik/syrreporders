@@ -10,6 +10,7 @@
  * Settings Save Action
  *
  * @package webasyst.shop.plugin.syrreporders.controller
+ * @deprecated since version 1.2.0
  */
 class shopSyrrepordersPluginBackendSaveController extends waJsonController
 {
