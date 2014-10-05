@@ -1,91 +1,87 @@
+<style>
+    #s-plugin-syrreporders-settings-block { border:1px solid #ccc; -webkit-box-shadow: 3px 3px 3px 0 #bbb;box-shadow: 3px 3px 3px 0 #bbb; }
+    #s-plugin-syrreporders-settings-block fieldset { background-color: transparent }
+    #s-plugin-syrreporders-settings-block fieldset legend { background-color:#e9e9e9 }
+    #s-plugin-syrreporders-settings-block fieldset .divider-top { border-top:1px solid #e9e9e9 }
+</style>
 <div class="block double-padded">
     <div class="content">
         <div id="reports-orders-graph" class="s-graph"></div>
         <div class="block double-padded">
             <div class="sidebar left400px">
-                <div id="reports-orders-controls" class="block double-padded" style="padding-top: 0">
-                    <div style="border:1px solid #ccc; border-radius: 4px;-webkit-box-shadow: 3px 3px 3px 0 #bbb;box-shadow: 3px 3px 3px 0 #bbb;" class="block padded">
+                <div id="reports-orders-controls" class="block padded" style="padding-top: 0">
+                    <div class="block" id="s-plugin-syrreporders-settings-block">
                         <h2>{_wp('Chart settings')}</h2>
-                        <form id="syrRepOrdersSettingsForm">
+                        <form id="syrRepOrdersSettingsForm" method="post">
                             <input type="hidden" name="report" value="orders">
+                            {$wa->csrf()}
                             <div class="fields">
-                                <div class="field">
-                                    <div class="name">
-                                        {_wp("Orders")}
-                                    </div>
-                                    <div class="value">
-                                        <input type="hidden" name="orders_graph[count]" value="0">
-                                        <label>
-                                            <input type="checkbox" name="orders_graph[count]" data-serie="0" data-column="count"{if $orders_graph['count']} checked="checked"{/if} value="1">
-                                            <span style="color:#3b7dc0">{_wp('Number of orders')}</span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="field">
-                                    <div class="name">
-                                        {_wp('Money')}
-                                    </div>
-                                    <div class="value">
-                                        <input type="hidden" name="orders_graph[totals]" value="0">
-                                        <label>
-                                            <input type="checkbox" name="orders_graph[totals]" data-serie="1"{if $orders_graph['totals']} checked="checked"{/if} data-column="totals" value="1">
-                                            <span style="color:#129d0e">{_wp('Totals')}</span>
-                                        </label>
-                                    </div>
-                                    {*<div class="value">
-                                        <label>
-                                            <input type="checkbox" name="orders_graph[product_totals]">
-                                            {_wp('Orders Products Sum')}
-                                        </label>
-                                    </div>*}
-                                    {*<div class="value">
-                                        <label>
-                                            <input type="checkbox" name="orders_graph[product_purchases]">
-                                            {_wp('Orders Purcahase Sum')}
-                                        </label>
-                                    </div>*}
-                                    {*<div class="value">
-                                        <label>
-                                            <input type="checkbox" name="orders_graph[services_total]">
-                                            {_wp('Orders Services Sum')}
-                                        </label>
-                                    </div>*}
-                                    <div class="value">
-                                        <input type="hidden" name="orders_graph[shipping]" value="0">
-                                        <label>
-                                            <input type="checkbox" name="orders_graph[shipping]" data-serie="2"{if $orders_graph['shipping']} checked="checked"{/if} data-column="shipping" value="1">
-                                            <span style="color:#a38717">{_wp('Shipping Total')}</span>
-                                        </label>
-                                    </div>
-                                    <div class="value">
-                                        <input type="hidden" name="orders_graph[discount]" value="0">
-                                        <label>
-                                            <input type="checkbox" name="orders_graph[discount]" data-serie="3"{if $orders_graph['discount']} checked="checked"{/if} data-column="discount" value="1">
-                                            <span style="color:#ac3562">{_wp('Discount Total')}</span>
-                                        </label>
-                                    </div>
-                                    <div class="value">
-                                        <input type="hidden" name="orders_graph[tax]" value="0">
-                                        <label>
-                                            <input type="checkbox" name="orders_graph[tax]" data-serie="4"{if $orders_graph['tax']} checked="checked"{/if} data-column="tax" value="1">
-                                            <span style="color:#1ba17a">{_wp('Tax Total')}</span>
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="field">
-                                    <div class="name">
-                                        {_wp("Order statuses")}
-                                        <p class="hint">{_wp('Count the statistics for the orders with the specified statuses only')}</p>
-                                    </div>
-                                    {foreach $orderStates as $os=>$osopts}
+                                <fieldset>
+                                    <legend>{_wp('Display')}</legend>
+                                    <div class="field">
+                                        <div class="name">
+                                            {_wp("Orders")}
+                                        </div>
                                         <div class="value">
+                                            <input type="hidden" name="orders_graph[count]" value="0">
                                             <label>
-                                                <input type="checkbox" name="orders_state[]" value="{$os}" data-update="1"{if in_array($os, $orders_states)} checked="checked"{/if}>
-                                                <span style="{foreach $osopts["options"]["style"] as $osstyle=>$osstyleval}{$osstyle}:{$osstyleval};{/foreach}">{$osopts.name}</span>
+                                                <input type="checkbox" name="orders_graph[count]" data-serie="0" data-column="count"{if $orders_graph['count']} checked="checked"{/if} value="1">
+                                                <span style="color:#3b7dc0">{_wp('Number of orders')}</span>
                                             </label>
                                         </div>
-                                    {/foreach}
-                                </div>
+                                    </div>
+                                    <div class="field divider-top">
+                                        <div class="name">
+                                            {_wp('Money')}
+                                        </div>
+                                        <div class="value">
+                                            <input type="hidden" name="orders_graph[totals]" value="0">
+                                            <label>
+                                                <input type="checkbox" name="orders_graph[totals]" data-serie="1"{if $orders_graph['totals']} checked="checked"{/if} data-column="totals" value="1">
+                                                <span style="color:#129d0e">{_wp('Totals')}</span>
+                                            </label>
+                                        </div>
+                                        <div class="value">
+                                            <input type="hidden" name="orders_graph[shipping]" value="0">
+                                            <label>
+                                                <input type="checkbox" name="orders_graph[shipping]" data-serie="2"{if $orders_graph['shipping']} checked="checked"{/if} data-column="shipping" value="1">
+                                                <span style="color:#a38717">{_wp('Shipping Total')}</span>
+                                            </label>
+                                        </div>
+                                        <div class="value">
+                                            <input type="hidden" name="orders_graph[discount]" value="0">
+                                            <label>
+                                                <input type="checkbox" name="orders_graph[discount]" data-serie="3"{if $orders_graph['discount']} checked="checked"{/if} data-column="discount" value="1">
+                                                <span style="color:#ac3562">{_wp('Discount Total')}</span>
+                                            </label>
+                                        </div>
+                                        <div class="value">
+                                            <input type="hidden" name="orders_graph[tax]" value="0">
+                                            <label>
+                                                <input type="checkbox" name="orders_graph[tax]" data-serie="4"{if $orders_graph['tax']} checked="checked"{/if} data-column="tax" value="1">
+                                                <span style="color:#1ba17a">{_wp('Tax Total')}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <legend>{_wp('Filter')}</legend>
+                                    <div class="field">
+                                        <div class="name">
+                                            {_wp("Order statuses")}
+                                            <p class="hint">{_wp('Count the statistics for the orders with the specified statuses only')}</p>
+                                        </div>
+                                        {foreach $orderStates as $os=>$osopts}
+                                            <div class="value">
+                                                <label>
+                                                    <input type="checkbox" name="orders_state[]" value="{$os}" data-update="1"{if in_array($os, $orders_states)} checked="checked"{/if}>
+                                                    <span style="{foreach $osopts["options"]["style"] as $osstyle=>$osstyleval}{$osstyle}:{$osstyleval};{/foreach}">{$osopts.name}</span>
+                                                </label>
+                                            </div>
+                                        {/foreach}
+                                    </div>
+                                </fieldset>
+                                <button type="button" class="green button" id="s-plugin-syrorders-refresh-btn">{_wp('Refresh')}</button>
                             </div>
                         </form>
                     </div>
@@ -261,40 +257,13 @@
         }
     });
     ordersReportPlot.redraw(false);
-
-    $("#reports-orders-controls").on("change", "input[type=checkbox]", function(){
-       
-        data = $("#syrRepOrdersSettingsForm").serialize();
-       
-        $("#reports-orders-controls input[type=checkbox]").attr("readonly", "readonly");
-        serie = parseInt($(this).data("serie"));
-        columnClass = $(this).data("column");
-        checked = $(this).is(":checked");
-        redrawGraph = parseInt($(this).data("update"));
-        
-//        alert("Timeframe: "+$.reports.getTimeframeParams());
-       
-        $.post("?plugin=syrreporders&action=setreppref", data, function(r){
-            if(r.status == 'ok') {
-                if(checked) {
-                    if(!isNaN(serie)){
-                        ordersReportPlot.series[serie].show = true;
-                        $("#syrRepOrdersTableValues .col-"+columnClass).show();
-                    }
-                } else {
-                    if(!isNaN(serie)){
-                        ordersReportPlot.series[serie].show = false;
-                        $("#syrRepOrdersTableValues .col-"+columnClass).hide();
-                    }
-                }
-                ordersReportPlot.redraw(false);
-            } else {
-                
-            }
-            
-        })
-        .always(function(){
-            $("#reports-orders-controls input[type=checkbox]").removeAttr("readonly");
+    
+    $("#s-plugin-syrorders-refresh-btn").click(function(){
+        $('#s-plugin-syrorders-refresh-btn').prop("disabled", true);
+        $.post('?plugin=syrreporders&action=setreppref', $("#syrRepOrdersSettingsForm").serialize(function(r){
+        })).always(function(){
+            $.reports.syrordersAction();
         });
     });
+    
 })();</script>
