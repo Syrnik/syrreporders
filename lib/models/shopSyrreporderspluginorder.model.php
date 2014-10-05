@@ -89,9 +89,14 @@ class shopSyrreporderspluginorderModel extends shopOrderModel
 
     public function getOrderStatsByDow(array $conditions = array())
     {
-        $defaults = array('start_date'=>NULL, 'end_date'=>NULL, 'group'=>'days');
+        $defaults = array('start_date'=>NULL, 'end_date'=>NULL, 'group'=>'days', 'weekdays_states'=>array());
         $conditions = array_merge($defaults, $conditions);
-        $create_date_sql = self::getDateSql('DATE(o.create_datetime)', $conditions['start_date'], $conditions['end_date']);
+        $create_date_sql = self::getDateSql('DATE(`o`.`create_datetime`)', $conditions['start_date'], $conditions['end_date']);
+        $states_sql = $this->whereOrdersStates('`o`.`state_id`', $conditions['weekdays_states']);
+
+        if(!empty($states_sql)) {
+            $states_sql = " AND $states_sql";
+        }
 
         $sql = "SELECT `dow`, AVG(`order_count`) AS `count`, sum(`order_total`)/sum(`order_count`) AS `total` "
                 . "FROM ( "
@@ -99,7 +104,7 @@ class shopSyrreporderspluginorderModel extends shopOrderModel
                 . "COUNT(*) as `order_count`,"
                 . "SUM(total*rate) AS `order_total` "
                 . "FROM `{$this->table}` o "
-                . "WHERE $create_date_sql "
+                . "WHERE {$create_date_sql}{$states_sql} "
                 . "GROUP BY DATE(create_datetime)"
                 . ") AS temp "
                 . "GROUP BY `dow` "

@@ -28,6 +28,7 @@ class shopSyrrepordersPluginBackendSetrepprefController extends waJsonController
 
             $graph_settings = waRequest::post('orders_graph');
             $orders_states = waRequest::post('orders_state');
+            $weekdays_state = waRequest::post('weekdays_state');
 
             if($graph_settings) {
                 $this->Setting->set(array('shop', 'syrreporders'), 'orders_graph', serialize($graph_settings));
@@ -35,6 +36,10 @@ class shopSyrrepordersPluginBackendSetrepprefController extends waJsonController
 
             if($orders_states) {
                 $this->Setting->set(array('shop', 'syrreporders'), 'orders_states', serialize($orders_states));
+            }
+            
+            if($weekdays_state) {
+                $this->Setting->set(array('shop', 'syrreporders'), 'weekdays_states', serialize($weekdays_state));
             }
 
         } catch (waException $ex) {
