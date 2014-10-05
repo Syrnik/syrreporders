@@ -13,6 +13,7 @@
  */
 class shopSyrrepordersPlugin extends shopPlugin
 {
+    const PLUGIN_ID='syrreporders';
 
     /**
      * Handler for backend_reports hook
