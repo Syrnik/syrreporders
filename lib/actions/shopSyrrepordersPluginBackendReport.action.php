@@ -16,9 +16,6 @@ class shopSyrrepordersPluginBackendReportAction extends waViewAction
 
     private $default_graphs = array('count'=>1, 'totals'=>1, 'shipping'=>1, 'discount'=>1, 'tax'=>1);
 
-    /** @var shopPlugin Main plugin class instance */
-    private $plugin;
-
     /** @var shopSyrreporderspluginorderModel */
     private $Order;
 
@@ -27,20 +24,9 @@ class shopSyrrepordersPluginBackendReportAction extends waViewAction
 
     public function __construct($params = null)
     {
-        $this->plugin = waSystem::getInstance('shop')->getPlugin(shopSyrrepordersPlugin::PLUGIN_ID);
         $this->Order = new shopSyrreporderspluginorderModel();
         $this->Setting = new waAppSettingsModel();
-        /*
-        if(waRequest::getMethod() == 'post'){
-            $data = waRequest::post("shop_syrreporders");
-            if(array_key_exists('orders_graph', $data)){
-                $this->Setting->set(array('shop','syrreporders'), 'orders_graph', serialize($data['orders_graph']));
-            }
-            if(array_key_exists('orders_states', $data)) {
-                $this->Setting->set(array('shop','syrreporders'), 'orders_graph', serialize($data['orders_states']));
-            }
-        }
-        */
+
         parent::__construct($params);
     }
 
@@ -50,8 +36,6 @@ class shopSyrrepordersPluginBackendReportAction extends waViewAction
         $currency = wa()->getConfig()->getCurrency();
         $max_sales = 0;
         $max_orders = 0;
-
-        $this->Setting = new waAppSettingsModel();
 
         $workflow = shopWorkflow::getConfig();
         $conditions["orders_states"] = unserialize($this->Setting->get(array('shop', 'syrreporders'), 'orders_states', serialize(array_keys($workflow["states"]))));
