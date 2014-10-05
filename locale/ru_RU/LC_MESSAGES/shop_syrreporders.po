@@ -192,3 +192,30 @@ msgstr "Среднее число продаж"
 #: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReportweekdays.html:44
 msgid "Average ticket price"
 msgstr "Средний чек"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:70
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReportweekdays.html:48
+msgid "Order statuses"
+msgstr "Статусы заказов"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:19
+msgid "Display"
+msgstr "Показать"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:67
+msgid "Filter"
+msgstr "Фильтр"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:71
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReportweekdays.html:49
+msgid "Count the statistics for the orders with the specified statuses only"
+msgstr "Подсчитывает статистику только  по заказам с указанными статусами"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReport.html:83
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReportweekdays.html:61
+msgid "Refresh"
+msgstr "Обновить"
+
+#: /wa-apps/shop/plugins/syrreporders/templates/actions/backend/BackendReportweekdays.html:43
+msgid "Filters"
+msgstr "Фильтры"
