@@ -3,9 +3,10 @@
  * @author Serge Rodovnichenko <sergerod@gmail.com>
  *
  * @license http://www.webasyst.com/terms/#eula Webasyst Commercial
- * @version 2.0.0
+ * @version 2.1.0
  *
  * 2.0.0 - getOrderStatsByDow refactored
+ * 2.1.0 - getOrderStatsByDow added filter by orders_states
  */
 
 /**

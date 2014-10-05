@@ -3,7 +3,9 @@
  * @author Serge Rodovnichenko <sergerod@gmail.com>
  *
  * @license http://www.webasyst.com/terms/#eula Webasyst Commercial
- * @version 1.1.0
+ * @version 2.1.0
+ * 
+ * 2.1.0 - Filter by orders states. Fixed bug with last day of period
  */
 
 /**
