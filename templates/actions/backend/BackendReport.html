@@ -61,6 +61,13 @@
                                                 <span style="color:#1ba17a">{_wp('Tax Total')}</span>
                                             </label>
                                         </div>
+                                        <div class="value">
+                                            <input type="hidden" name="orders_graph[avg_ticket_price]" value="0">
+                                            <label>
+                                                <input type="checkbox" name="orders_graph[avg_ticket_price]" data-serie="5"{if $orders_graph['avg_ticket_price']} checked="checked"{/if} data-column="avg_ticket_price" value="1">
+                                                <span style="color:#87469f">{_wp('Average ticket price')}</span>
+                                            </label>
+                                        </div>
                                     </div>
                                 </fieldset>
                                 <fieldset>
@@ -113,6 +120,9 @@
                                 <th style="text-align: center;{if not $orders_graph['tax']} display:none;{/if}" class="col-tax">
                                     {_wp('Taxes Total')}
                                 </th>
+                                <th style="text-align: center;{if not $orders_graph['avg_ticket_price']} display:none;{/if}" class="col-avg_ticket_price">
+                                    {_wp('Average ticket price')}
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -125,6 +135,7 @@
                                         <td style="text-align: right;{if not $orders_graph['shipping']} display:none;{/if}" class="col-shipping">{$row['shipping']|wa_format_amount_currency:$currency}</td>
                                         <td style="text-align: right;{if not $orders_graph['discount']} display:none;{/if}" class="col-discount">{$row['discount']|wa_format_amount_currency:$currency}</td>
                                         <td style="text-align: right;{if not $orders_graph['tax']} display:none;{/if}" class="col-tax">{$row['tax']|wa_format_amount_currency:$currency}</td>
+                                        <td style="text-align: right;{if not $orders_graph['avg_ticket_price']} display:none;{/if}" class="col-tax">{$row['avg_ticket_price']|wa_format_amount_currency:$currency}</td>
                                     </tr>
                                 {/if}
                             {/foreach}
@@ -153,45 +164,44 @@
             {json_encode($chart_data['sales'])},
             {json_encode($chart_data['shipping'])},
             {json_encode($chart_data['discount'])},
-            {json_encode($chart_data['tax'])}
+            {json_encode($chart_data['tax'])},
+            {json_encode($chart_data['avg_ticket_price'])}
         ], {
         seriesColors : ["#3b7dc0", "#129d0e", "#a38717", "#ac3562", "#1ba17a", "#87469f", "#6b6b6b", "#686190", "#b2b000", "#00b1ab", "#76b300"],
+        seriesDefaults : {
+            shadow : false,
+            lineWidth : 3,
+            fill : true,
+            fillAlpha : 0.1,
+            fillAndStroke : true,
+            rendererOptions : {
+                highlightMouseOver : false,
+            },
+        },
         series : [
             {
                 yaxis : 'y2axis',
-                shadow : false,
-                lineWidth : 3,
-                fill : true,
-                fillAlpha : 0.1,
-                fillAndStroke : true,
-                rendererOptions : {
-                    highlightMouseOver : false,
-                },
                 label : '{_wp("Quantity")|escape:'javascript'}'
             },
             {
                 yaxis : 'yaxis',
-                shadow : false,
-                lineWidth : 3,
-                fill : true,
-                fillAlpha : 0.1,
-                fillAndStroke : true,
-                rendererOptions : {
-                    highlightMouseOver : false,
-                },
                 label : '{_wp("Money")|escape:'javascript'}'
             },
             {
                 yaxis : 'yaxis',
-                shadow : false,
-                lineWidth : 3,
-                fill : true,
-                fillAlpha : 0.1,
-                fillAndStroke : true,
-                rendererOptions : {
-                    highlightMouseOver : false,
-                },
                 label : '{_wp("Shipping")|escape:'javascript'}'
+            },
+            {
+                yaxis : 'yaxis',
+                label : '{_wp("Discount")|escape:'javascript'}'
+            },
+            {
+                yaxis : 'yaxis',
+                label : '{_wp("Tax")|escape:'javascript'}'
+            },
+            {
+                yaxis : 'yaxis',
+                label : '{_wp("Average ticket price")|escape:'javascript'}'
             },
         ],
         grid : {
