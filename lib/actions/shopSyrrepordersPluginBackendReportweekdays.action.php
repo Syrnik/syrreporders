@@ -3,7 +3,7 @@
  * @author Serge Rodovnichenko <sergerod@gmail.com>
  *
  * @license http://www.webasyst.com/terms/#eula Webasyst Commercial
- * @version 1.1.0
+ * @version 2.2.2
  */
 
 /**
@@ -29,7 +29,13 @@ class shopSyrrepordersPluginBackendReportweekdaysAction extends waViewAction
     }
     public function execute()
     {
-        $conditions = array_combine(array('start_date', 'end_date', 'group'), shopReportsSalesAction::getTimeframeParams());
+        $timeframe = shopReportsSalesAction::getTimeframeParams();
+
+        $conditions = array(
+            'start_date' => $timeframe[0],
+            'end_date'   => $timeframe[1],
+            'group'      => $timeframe[2]);
+        
         $currency = wa()->getConfig()->getCurrency();
         $workflow = shopWorkflow::getConfig();
         
