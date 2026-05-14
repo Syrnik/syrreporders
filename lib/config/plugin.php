@@ -4,7 +4,7 @@ return array(
     'name' => 'Additional Reports',
     'description' => 'More reports',
     'vendor'=>670917,
-    'version'=>'2.2.0',
+    'version'=>'2.2.2',
     'shop_settings' => TRUE,
     'frontend'    => FALSE,
     'icons'=>array(
