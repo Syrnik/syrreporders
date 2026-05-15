@@ -114,16 +114,16 @@
 <script>
 document.title = '{_wp("Order Report")|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}';
 new SyrrepordersOrdersChart({
-    currency: '{$currency|escape:'javascript'}',
-    groupBy:  '{$group_by|escape:'javascript'}',
+    currency: {$currency|json_encode:256},
+    groupBy:  {$group_by|json_encode:256},
     labels: {
-        title:            '{_wp("Orders")|escape:'javascript'}',
-        count:            '{_wp("Number of orders")|escape:'javascript'}',
-        totals:           '{_wp("Totals")|escape:'javascript'}',
-        shipping:         '{_wp("Shipping Total")|escape:'javascript'}',
-        discount:         '{_wp("Discount Total")|escape:'javascript'}',
-        tax:              '{_wp("Tax Total")|escape:'javascript'}',
-        avg_ticket_price: '{_wp("Average ticket price")|escape:'javascript'}'
+        title:            {_wp("Orders")|json_encode:256},
+        count:            {_wp("Number of orders")|json_encode:256},
+        totals:           {_wp("Totals")|json_encode:256},
+        shipping:         {_wp("Shipping Total")|json_encode:256},
+        discount:         {_wp("Discount Total")|json_encode:256},
+        tax:              {_wp("Tax Total")|json_encode:256},
+        avg_ticket_price: {_wp("Average ticket price")|json_encode:256}
     }
 });
 </script>

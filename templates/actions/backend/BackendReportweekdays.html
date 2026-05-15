@@ -69,20 +69,20 @@
 <script>
 document.title = '{_wp("Weekdays")|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}';
 new SyrrepordersWeekdaysChart({
-    currency: '{$currency|escape:'javascript'}',
+    currency: {$currency|json_encode:256},
     weekdayNames: [
-        '{_wp("Monday")|escape:"javascript"}',
-        '{_wp("Tuesday")|escape:"javascript"}',
-        '{_wp("Wednesday")|escape:"javascript"}',
-        '{_wp("Thursday")|escape:"javascript"}',
-        '{_wp("Friday")|escape:"javascript"}',
-        '{_wp("Saturday")|escape:"javascript"}',
-        '{_wp("Sunday")|escape:"javascript"}'
+        {_wp("Monday")|json_encode:256},
+        {_wp("Tuesday")|json_encode:256},
+        {_wp("Wednesday")|json_encode:256},
+        {_wp("Thursday")|json_encode:256},
+        {_wp("Friday")|json_encode:256},
+        {_wp("Saturday")|json_encode:256},
+        {_wp("Sunday")|json_encode:256}
     ],
     labels: {
-        title:  '{_wp("Orders by Weekdays")|escape:"javascript"}',
-        totals: '{_wp("Totals")|escape:"javascript"}',
-        count:  '{_wp("Number of orders")|escape:"javascript"}'
+        title:  {_wp("Orders by Weekdays")|json_encode:256},
+        totals: {_wp("Totals")|json_encode:256},
+        count:  {_wp("Number of orders")|json_encode:256}
     }
 });
 </script>
