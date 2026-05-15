@@ -40,14 +40,14 @@ class shopSyrrepordersPlugin extends shopPlugin
             if (!empty($settings['report_orders'])) {
                 $html .= <<<HTML
 $.reports.syrordersAction = function(){
-            $("#reportscontent").load("?plugin=syrreporders&action=report"+this.getTimeframeParams());
+            this.load("?plugin=syrreporders&action=report"+this.getTimeframeParams());
         };
 HTML;
             }
             if (!empty($settings['report_weekdays'])) {
                 $html .= <<<HTML
         $.reports.syrweekdaysAction = function(){
-            $("#reportscontent").load("?plugin=syrreporders&action=reportweekdays"+this.getTimeframeParams());
+            this.load("?plugin=syrreporders&action=reportweekdays"+this.getTimeframeParams());
         };
 HTML;
             }
