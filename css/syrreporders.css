@@ -6,6 +6,7 @@
 .syrreporders-settings-block {
     border: 1px solid #ccc;
     box-shadow: 3px 3px 3px 0 #bbb;
+    overflow: hidden;
 }
 
 .syrreporders-settings-block fieldset {
