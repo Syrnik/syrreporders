@@ -6,7 +6,9 @@
 </style>
 <div class="block double-padded">
     <div class="content">
-        <div id="reports-orders-graph" class="s-graph"></div>
+        <div id="reports-orders-graph" class="s-graph" style="position:relative;height:300px;">
+            <canvas id="syr-orders-chart"></canvas>
+        </div>
         <div class="block double-padded">
             <div class="sidebar left400px">
                 <div id="reports-orders-controls" class="block padded" style="padding-top: 0">
@@ -154,125 +156,166 @@
 (function() {
 
     document.title = '{_wp("Order Report")|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}';
-    
-    {$cnt = count($chart_data['count'])};
-    {$scale = floor($cnt/35) + 1}   
 
-    var ordersReportPlot = $.jqplot("reports-orders-graph",
-        [
-            {json_encode($chart_data['count'])},
-            {json_encode($chart_data['sales'])},
-            {json_encode($chart_data['shipping'])},
-            {json_encode($chart_data['discount'])},
-            {json_encode($chart_data['tax'])},
-            {json_encode($chart_data['avg_ticket_price'])}
-        ], {
-        seriesColors : ["#3b7dc0", "#129d0e", "#a38717", "#ac3562", "#1ba17a", "#87469f", "#6b6b6b", "#686190", "#b2b000", "#00b1ab", "#76b300"],
-        seriesDefaults : {
-            shadow : false,
-            lineWidth : 3,
-            fill : true,
-            fillAlpha : 0.1,
-            fillAndStroke : true,
-            rendererOptions : {
-                highlightMouseOver : false,
-            },
-        },
-        series : [
-            {
-                yaxis : 'y2axis',
-                label : '{_wp("Quantity")|escape:'javascript'}'
-            },
-            {
-                yaxis : 'yaxis',
-                label : '{_wp("Money")|escape:'javascript'}'
-            },
-            {
-                yaxis : 'yaxis',
-                label : '{_wp("Shipping")|escape:'javascript'}'
-            },
-            {
-                yaxis : 'yaxis',
-                label : '{_wp("Discount")|escape:'javascript'}'
-            },
-            {
-                yaxis : 'yaxis',
-                label : '{_wp("Tax")|escape:'javascript'}'
-            },
-            {
-                yaxis : 'yaxis',
-                label : '{_wp("Average ticket price")|escape:'javascript'}'
-            },
-        ],
-        grid : {
-            borderWidth : 0,
-            background : '#ffffff',
-            gridLineColor : '#eeeeee',
-            shadow: false
-        },
-        axes:{
-            xaxis:{
-                renderer: $.jqplot.DateAxisRenderer,
-                showTickMarks: false,
-                tickOptions:{
-                    formatString: {if $group_by == 'days'}0{else}1{/if} ? '%b %Y' : '%b %d'
+    var formatCurrency = function(value) {
+        {if $currency eq 'RUB'}
+        return value.toFixed(2) + ' руб.';
+        {elseif $currency eq 'USD'}
+        return '$' + value.toFixed(2);
+        {elseif $currency eq 'EUR'}
+        return '€' + value.toFixed(2);
+        {elseif $currency eq 'UAH'}
+        return value.toFixed(2) + ' грн.';
+        {else}
+        return value.toFixed(2);
+        {/if}
+    };
+
+    var toPoints = function(arr) {
+        return arr.map(function(p) { return { x: p[0], y: p[1] }; });
+    };
+
+    var ordersChart = new Chart(document.getElementById('syr-orders-chart'), {
+        type: 'line',
+        data: {
+            datasets: [
+                {
+                    label: '{_wp("Number of orders")|escape:'javascript'}',
+                    data: toPoints({json_encode($chart_data['count'])}),
+                    borderColor: '#3b7dc0',
+                    backgroundColor: 'rgba(59,125,192,0.1)',
+                    yAxisID: 'y2',
+                    borderWidth: 3,
+                    pointRadius: 2,
+                    fill: true,
+                    hidden: {if $orders_graph['count']}false{else}true{/if}
                 },
-                tickInterval: "{if $cnt <= 35}1 {if $group_by != 'days'}month{else}day{/if}{else}{$scale} {if $group_by != 'days'}months{else}days{/if}{/if}"
+                {
+                    label: '{_wp("Totals")|escape:'javascript'}',
+                    data: toPoints({json_encode($chart_data['sales'])}),
+                    borderColor: '#129d0e',
+                    backgroundColor: 'rgba(18,157,14,0.1)',
+                    yAxisID: 'y1',
+                    borderWidth: 3,
+                    pointRadius: 2,
+                    fill: true,
+                    hidden: {if $orders_graph['totals']}false{else}true{/if}
+                },
+                {
+                    label: '{_wp("Shipping Total")|escape:'javascript'}',
+                    data: toPoints({json_encode($chart_data['shipping'])}),
+                    borderColor: '#a38717',
+                    backgroundColor: 'rgba(163,135,23,0.1)',
+                    yAxisID: 'y1',
+                    borderWidth: 3,
+                    pointRadius: 2,
+                    fill: true,
+                    hidden: {if $orders_graph['shipping']}false{else}true{/if}
+                },
+                {
+                    label: '{_wp("Discount Total")|escape:'javascript'}',
+                    data: toPoints({json_encode($chart_data['discount'])}),
+                    borderColor: '#ac3562',
+                    backgroundColor: 'rgba(172,53,98,0.1)',
+                    yAxisID: 'y1',
+                    borderWidth: 3,
+                    pointRadius: 2,
+                    fill: true,
+                    hidden: {if $orders_graph['discount']}false{else}true{/if}
+                },
+                {
+                    label: '{_wp("Tax Total")|escape:'javascript'}',
+                    data: toPoints({json_encode($chart_data['tax'])}),
+                    borderColor: '#1ba17a',
+                    backgroundColor: 'rgba(27,161,122,0.1)',
+                    yAxisID: 'y1',
+                    borderWidth: 3,
+                    pointRadius: 2,
+                    fill: true,
+                    hidden: {if $orders_graph['tax']}false{else}true{/if}
+                },
+                {
+                    label: '{_wp("Average ticket price")|escape:'javascript'}',
+                    data: toPoints({json_encode($chart_data['avg_ticket_price'])}),
+                    borderColor: '#87469f',
+                    backgroundColor: 'rgba(135,70,159,0.1)',
+                    yAxisID: 'y1',
+                    borderWidth: 3,
+                    pointRadius: 2,
+                    fill: true,
+                    hidden: {if $orders_graph['avg_ticket_price']}false{else}true{/if}
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false
             },
-            yaxis:{
-                min: 0,
-                showTicks: true,
-                showTickMarks: true,
-                tickOptions:{
-                    {if $currency eq 'RUB'}
-                        formatString:'%.2f руб.'
-                    {elseif $currency eq 'USD'}
-                        formatString:'$%.2f'
-                    {elseif $currency eq 'EUR'}
-                        formatString:'€%.2f'
-                    {elseif $currency eq 'UAH'}
-                        formatString:'%.2f грн.'
-                    {else}
-                        formatString:'%.2f'
-                    {/if}
+            plugins: {
+                legend: { display: false },
+                title: {
+                    display: true,
+                    text: '{_wp("Orders")|escape:'javascript'}'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            var label = context.dataset.label + ': ';
+                            if (context.dataset.yAxisID === 'y2') {
+                                label += Math.round(context.parsed.y);
+                            } else {
+                                label += formatCurrency(context.parsed.y);
+                            }
+                            return label;
+                        }
+                    }
                 }
             },
-            y2axis:{
-                min: 0,
-                showTicks: true,
-                showTickMarks: false,
-                tickOptions:{
-                    formatString:'%d'
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: '{if $group_by == 'days'}day{else}month{/if}',
+                        displayFormats: {
+                            day: 'dd MMM',
+                            month: 'MMM yyyy'
+                        }
+                    },
+                    grid: { color: '#eeeeee' },
+                    ticks: { maxTicksLimit: 35 }
+                },
+                y1: {
+                    type: 'linear',
+                    position: 'left',
+                    min: 0,
+                    grid: { color: '#eeeeee' },
+                    ticks: {
+                        callback: function(value) { return formatCurrency(value); }
+                    }
+                },
+                y2: {
+                    type: 'linear',
+                    position: 'right',
+                    min: 0,
+                    grid: { drawOnChartArea: false },
+                    ticks: {
+                        callback: function(value) { return Math.round(value); }
+                    }
                 }
             }
-        },
-        highlighter: {
-            show: true,
-            sizeAdjust: 7.5
-        },
-        cursor: {
-            show: false
-        },
-        legend:{
-            show: false,
-        },
-        title: "{_wp("Orders")|escape:'javascript'}"
-    });
-
-    $("#syrRepOrdersSettingsForm input[type=checkbox]").each(function(i){
-        if(!$(this).is(":checked")){
-            serie = parseInt($(this).data("serie"));
-            if(!isNaN(serie)){ ordersReportPlot.series[serie].show = false; }
         }
     });
-    ordersReportPlot.redraw(false);
-    
-    $("#s-plugin-syrorders-refresh-btn").click(function(){
+
+    $("#s-plugin-syrorders-refresh-btn").click(function() {
         $('#s-plugin-syrorders-refresh-btn').prop("disabled", true);
-        $.post('?plugin=syrreporders&action=setreppref', $("#syrRepOrdersSettingsForm").serialize(function(r){
-        })).always(function(){
-            $.reports.syrordersAction();
-        });
+        $.post('?plugin=syrreporders&action=setreppref', $("#syrRepOrdersSettingsForm").serialize())
+            .always(function() {
+                $.reports.syrordersAction();
+            });
     });
-    
-})();</script>
+
+})();
+</script>

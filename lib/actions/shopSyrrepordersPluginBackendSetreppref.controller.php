@@ -22,7 +22,7 @@ class shopSyrrepordersPluginBackendSetrepprefController extends waJsonController
 
         try {
             $report = waRequest::post('report');
-            if(empty($report) || !in_array($report, array('orders', 'weekdays'))) {
+            if (empty($report) || !in_array($report, array('orders', 'weekdays'))) {
                 throw new waException("Report ID is invalid or absent");
             }
 
@@ -30,18 +30,17 @@ class shopSyrrepordersPluginBackendSetrepprefController extends waJsonController
             $orders_states = waRequest::post('orders_state');
             $weekdays_state = waRequest::post('weekdays_state');
 
-            if($graph_settings) {
+            if ($graph_settings) {
                 $this->Setting->set(array('shop', 'syrreporders'), 'orders_graph', serialize($graph_settings));
             }
 
-            if($orders_states) {
+            if ($orders_states) {
                 $this->Setting->set(array('shop', 'syrreporders'), 'orders_states', serialize($orders_states));
             }
-            
-            if($weekdays_state) {
+
+            if ($weekdays_state) {
                 $this->Setting->set(array('shop', 'syrreporders'), 'weekdays_states', serialize($weekdays_state));
             }
-
         } catch (waException $ex) {
             $this->setError($ex->getMessage());
         }

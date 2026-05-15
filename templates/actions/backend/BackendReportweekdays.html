@@ -8,8 +8,9 @@
 
 <div class="block double-padded">
     <div class="content">
-        {*<h1>{_wp("Days of week")}</h1>*}
-        <div id="reports-dow-orders" class="s-graph"></div>
+        <div id="reports-dow-orders" class="s-graph" style="position:relative;height:300px;">
+            <canvas id="syr-weekdays-chart"></canvas>
+        </div>
         <div class="block">
             <div class="sidebar left400px">
                 <div id="reports-weekdays-controls" class="block padded" style="padding-top: 0">
@@ -89,84 +90,121 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">(function() {
+<script type="text/javascript">
+(function() {
 
     document.title = '{_wp("Weekdays")|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}';
-    
-    $.jqplot("reports-dow-orders", [
-        [{foreach $stats.dow.data as $dow}{$dow.total}{if !$dow@last},{/if}{/foreach}],
-        [{foreach $stats.dow.data as $dow}{$dow.count}{if !$dow@last},{/if}{/foreach}]
-    ],
-    {
-        animate: true,
-        seriesColors : ["#129d0e", "#3b7dc0", "#a38717", "#ac3562", "#1ba17a", "#87469f", "#6b6b6b", "#686190", "#b2b000", "#00b1ab", "#76b300"],
-        seriesDefaults: {
-            renderer: $.jqplot.BarRenderer,
-            rendererOptions: {
-                fillToZero: true,
-                highlightMouseOver: false
-            },
-            pointLabels: {
-                show: false
-            },
+
+    var formatCurrency = function(value) {
+        {if $currency eq 'RUB'}
+        return value.toFixed(2) + ' руб.';
+        {elseif $currency eq 'USD'}
+        return '$' + value.toFixed(2);
+        {elseif $currency eq 'EUR'}
+        return '€' + value.toFixed(2);
+        {elseif $currency eq 'UAH'}
+        return value.toFixed(2) + ' грн.';
+        {else}
+        return value.toFixed(2);
+        {/if}
+    };
+
+    var weekdayNames = [
+        '{_wp("Monday")|escape:"javascript"}',
+        '{_wp("Tuesday")|escape:"javascript"}',
+        '{_wp("Wednesday")|escape:"javascript"}',
+        '{_wp("Thursday")|escape:"javascript"}',
+        '{_wp("Friday")|escape:"javascript"}',
+        '{_wp("Saturday")|escape:"javascript"}',
+        '{_wp("Sunday")|escape:"javascript"}'
+    ];
+
+    var dowData = {json_encode($stats.dow.data)};
+    dowData.sort(function(a, b) { return parseInt(a.dow) - parseInt(b.dow); });
+
+    var labels = dowData.map(function(d) { return weekdayNames[parseInt(d.dow)]; });
+    var totals = dowData.map(function(d) { return parseFloat(d.total); });
+    var counts = dowData.map(function(d) { return parseFloat(d.count); });
+
+    new Chart(document.getElementById('syr-weekdays-chart'), {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [
+                {
+                    label: '{_wp("Totals")|escape:"javascript"}',
+                    data: totals,
+                    backgroundColor: 'rgba(18,157,14,0.7)',
+                    borderColor: '#129d0e',
+                    borderWidth: 1,
+                    yAxisID: 'y1'
+                },
+                {
+                    label: '{_wp("Number of orders")|escape:"javascript"}',
+                    data: counts,
+                    backgroundColor: 'rgba(59,125,192,0.7)',
+                    borderColor: '#3b7dc0',
+                    borderWidth: 1,
+                    yAxisID: 'y2'
+                }
+            ]
         },
-        series: [
-            {
-                yaxis: "yaxis"
-            },
-            {
-                yaxis: "y2axis"
-            }
-        ],
-        grid: {
-            shadow: false,
-            background: "#ffffff",
-            gridLineColor: "#eeeeee",
-            borderWidth: 0
-        },
-        axes: {
-            xaxis: {
-                renderer: $.jqplot.CategoryAxisRenderer,
-                ticks: [ "{_wp("Monday")|escape:"javascript"}", "{_wp("Tuesday")|escape:"javascript"}", "{_wp("Wednesday")|escape:"javascript"}", "{_wp("Thursday")|escape:"javascript"}", "{_wp("Friday")|escape:"javascript"}", "{_wp("Saturday")|escape:"javascript"}", "{_wp("Sunday")|escape:"javascript"}" ]
-            },
-            yaxis:{
-                min: 0,
-                showTicks: true,
-                showTickMarks: true,
-                tickOptions:{                                                                                                                                                                                                                                                                                   
-                    {if $currency eq 'RUB'}
-                        formatString:'%.2f руб.'
-                    {elseif $currency eq 'USD'}
-                        formatString:'$%.2f'
-                    {elseif $currency eq 'EUR'}
-                        formatString:'€%.2f'
-                    {elseif $currency eq 'UAH'}
-                        formatString:'%.2f грн.'
-                    {else}
-                        formatString:'%.2f'
-                    {/if}
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            animation: { duration: 500 },
+            plugins: {
+                title: {
+                    display: true,
+                    text: '{_wp("Orders by Weekdays")|escape:"javascript"}'
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            var label = context.dataset.label + ': ';
+                            if (context.dataset.yAxisID === 'y2') {
+                                label += Math.round(context.parsed.y);
+                            } else {
+                                label += formatCurrency(context.parsed.y);
+                            }
+                            return label;
+                        }
+                    }
                 }
             },
-            y2axis: {
-                tickOptions: { formatString: '%d' },
-                showTicks: false,
-                showTickMarks: false                                                                                                                                                                                                                                                                                ,
-                min: 0
+            scales: {
+                x: {
+                    grid: { color: '#eeeeee' }
+                },
+                y1: {
+                    type: 'linear',
+                    position: 'left',
+                    min: 0,
+                    grid: { color: '#eeeeee' },
+                    ticks: {
+                        callback: function(value) { return formatCurrency(value); }
+                    }
+                },
+                y2: {
+                    type: 'linear',
+                    position: 'right',
+                    min: 0,
+                    grid: { drawOnChartArea: false },
+                    ticks: {
+                        callback: function(value) { return Math.round(value); }
+                    }
+                }
             }
-        },
-        cursor: {
-            show: false
-        },
-        title: '{_wp("Orders by Weekdays")|escape:"javascript"}'
+        }
     });
-    
-    $("#s-plugin-syrorders-refresh-btn").click(function(){
-        $('#s-plugin-syrorders-refresh-btn').prop("disabled", true);
-        $.post('?plugin=syrreporders&action=setreppref', $("#syrRepOrdersSettingsForm").serialize(function(r){
-        })).always(function(){
-            $.reports.syrweekdaysAction();
-        });
-    });
-    
-})();</script>
 
+    $("#s-plugin-syrorders-refresh-btn").click(function() {
+        $('#s-plugin-syrorders-refresh-btn').prop("disabled", true);
+        $.post('?plugin=syrreporders&action=setreppref', $("#syrRepOrdersSettingsForm").serialize())
+            .always(function() {
+                $.reports.syrweekdaysAction();
+            });
+    });
+
+})();
+</script>
