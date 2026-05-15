@@ -4,7 +4,7 @@ return [
     'name' => 'Additional Reports',
     'description' => 'More reports',
     'vendor' => 670917,
-    'version' => '2.2.2',
+    'version' => '2.3.0',
     'shop_settings' => true,
     'frontend' => false,
     'icons' => [
