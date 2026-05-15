@@ -209,6 +209,7 @@ class SyrrepordersWeekdaysChart {
 
   refresh(): JQuery.jqXHR<AjaxResponse> {
     const $btn = $('#s-plugin-syrorders-refresh-btn').prop('disabled', true)
+    $btn.find('.js-syrorders-refresh-spinner').show()
 
     return $.post('?plugin=syrreporders&action=reportweekdaysdata', $('#syrRepOrdersSettingsForm').serialize())
       .done((resp: AjaxResponse) => {
@@ -218,7 +219,10 @@ class SyrrepordersWeekdaysChart {
           this.updateTable(resp.data.dow)
         }
       })
-      .always(() => { $btn.prop('disabled', false) })
+      .always(() => {
+        $btn.prop('disabled', false)
+        $btn.find('.js-syrorders-refresh-spinner').hide()
+      })
   }
 
   private bindEvents(): void {

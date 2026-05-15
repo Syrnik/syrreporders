@@ -273,12 +273,16 @@ class SyrrepordersOrdersChart {
 
   refresh(): JQuery.jqXHR<AjaxResponse> {
     const $btn = $('#s-plugin-syrorders-refresh-btn').prop('disabled', true)
+    $btn.find('.js-syrorders-refresh-spinner').show()
 
     return $.post('?plugin=syrreporders&action=reportdata', $('#syrRepOrdersSettingsForm').serialize())
       .done((resp: AjaxResponse) => {
         if (resp?.status === 'ok') this.updateChart(resp.data)
       })
-      .always(() => { $btn.prop('disabled', false) })
+      .always(() => {
+        $btn.prop('disabled', false)
+        $btn.find('.js-syrorders-refresh-spinner').hide()
+      })
   }
 
   private bindEvents(): void {

@@ -1,15 +1,15 @@
-<div class="block double-padded">
+<div class="box">
     <div class="content">
         <div id="reports-dow-orders" class="syrreporders-chart-container">
             <canvas id="syr-weekdays-chart"></canvas>
         </div>
-        <div class="block">
-            <div class="sidebar left400px">
-                <div id="reports-weekdays-controls" class="block padded">
-                    <div class="syrreporders-settings-block">
-                        <h2>{_wp("Best Weekdays")}</h2>
+        <div class="flexbox">
+            <div class="sidebar width-26rem">
+                <div id="reports-weekdays-controls" class="box">
+                    <div class="custom-p-8">
+                        <h3 class="semibold">{_wp("Best Weekdays")}</h3>
                         <div class="fields">
-                            <div class="field-group">
+                            <div class="field-group custom-m-0">
                                 <div class="field">
                                     <div class="name">{_wp('Max number of orders')}</div>
                                     <div class="value" id="syr-weekdays-top-count">—</div>
@@ -21,33 +21,48 @@
                             </div>
                         </div>
                     </div>
-                    <div class="syrreporders-settings-block">
-                        <h2>{_wp('Filters')}</h2>
-                        <form id="syrRepOrdersSettingsForm">
+                    <div class="custom-p-8">
+                        <h3 class="semibold">{_wp('Filters')}</h3>
+                        <form id="syrRepOrdersSettingsForm" class="fields">
                             <input type="hidden" name="report" value="weekdays">
-                            <div class="field">
-                                <div class="name">
-                                    {_wp("Order statuses")}
-                                    <p class="hint">{_wp('Count the statistics for the orders with the specified statuses only')}</p>
-                                </div>
-                                {foreach $all_order_states as $os=>$osopts}
-                                    <div class="value">
-                                        <label>
-                                            <input type="checkbox" name="weekdays_state[]" value="{$os}" checked>
-                                            <span style="{foreach $osopts["options"]["style"] as $k=>$v}{$k}:{$v};{/foreach}">{$osopts.name}</span>
-                                        </label>
+                            <div class="field-group custom-m-0">
+                                <div class="field">
+                                    <div class="name">
+                                        {_wp("Order statuses")}
+                                        <p class="hint">{_wp('Count the statistics for the orders with the specified statuses only')}</p>
                                     </div>
-                                {/foreach}
-                            </div>
-                            <div class="syrreporders-btn-row">
-                                <button type="button" class="green button" id="s-plugin-syrorders-refresh-btn">{_wp('Refresh')}</button>
+                                    <div class="value">
+                                        <ul>
+                                        {foreach $all_order_states as $os=>$osopts}
+                                        <li class="small">
+                                            <label>
+                                                <span class="wa-checkbox">
+                                                    <input type="checkbox" name="weekdays_state[]" value="{$os}" checked>
+                                                    <span>
+                                                        <span class="icon">
+                                                            <i class="fas fa-check"></i>
+                                                        </span>
+                                                    </span>
+                                                </span>
+                                                <span style="{foreach $osopts["options"]["style"] as $k=>$v}{$k}:{$v};{/foreach}">{$osopts.name}</span>
+                                            </label>
+                                        </li>
+                                        {/foreach}
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="submit field">
+                                    <div class="value">
+                                        <button type="button" class="button green" id="s-plugin-syrorders-refresh-btn">{_wp('Refresh')} <span class="icon js-syrorders-refresh-spinner" style="display: none"><i class="fas fa-spinner wa-animation-spin speed-1000"></i></span></button>
+                                    </div>
+                                </div>
                             </div>
                         </form>
                     </div>
                 </div>
             </div>
-            <div class="content left400px">
-                <div id="reports-weekdays-table" class="block padded">
+            <div class="content">
+                <div id="reports-weekdays-table" class="box">
                     <table class="zebra">
                         <thead>
                             <tr>
@@ -62,7 +77,6 @@
                 </div>
             </div>
         </div>
-        <div class="clear-both"></div>
     </div>
 </div>
 

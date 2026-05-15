@@ -31,6 +31,52 @@ class shopSyrrepordersPlugin extends shopPlugin
         $this->addCss('css/syrreporders.css');
         $this->addJs('js/syrreporders-orders.js');
         $this->addJs('js/syrreporders-weekdays.js');
-        return ['menu_li' => $content];
+
+        if (version_compare(wa()->whichUI(), '2.0', '>=')) {
+            $html = "<script>\n";
+            if (empty($settings['report_orders']) && empty($settings['report_weekdays'])) {
+                return [];
+            }
+            if (!empty($settings['report_orders'])) {
+                $html .= <<<HTML
+$.reports.syrordersAction = function(){
+            $("#reportscontent").load("?plugin=syrreporders&action=report"+this.getTimeframeParams());
+        };
+HTML;
+            }
+            if (!empty($settings['report_weekdays'])) {
+                $html .= <<<HTML
+        $.reports.syrweekdaysAction = function(){
+            $("#reportscontent").load("?plugin=syrreporders&action=reportweekdays"+this.getTimeframeParams());
+        };
+HTML;
+            }
+
+            $html .= "</script>";
+            return ['html' => $html];
+        } else {
+            return ['menu_li' => $content];
+        }
+    }
+
+    public function backendExtendedMenu(array $params): void
+    {
+        $settings = $this->getSettings();
+        if (isset($params['menu']['reports']['submenu'])) {
+            $shop_backend_url = wa('shop')->getAppUrl(null, true);
+
+            if (!empty($settings['report_orders'])) {
+                $params['menu']['reports']['submenu'][] = [
+                    'name' => _wp('Orders'),
+                    'url' => "$shop_backend_url?action=reports#/syrorders/"
+                ];
+            }
+            if (!empty($settings['report_weekdays'])) {
+                $params['menu']['reports']['submenu'][] = [
+                    'name' => _wp('Weekdays'),
+                    'url' => "$shop_backend_url?action=reports#/syrweekdays/"
+                ];
+            }
+        }
     }
 }

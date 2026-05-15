@@ -12,6 +12,7 @@ return [
     ],
     'handlers' => [
         'backend_reports' => 'backendReports',
+        'backend_extended_menu' => 'backendExtendedMenu'
     ],
     'locale' => ['en_US', 'ru_RU']
 ];
