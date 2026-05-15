@@ -80,5 +80,7 @@ return array(
     'vite.orders.config.ts',
     'vite.weekdays.config.ts',
     'node_modules/*',
-    'src/*'
+    'src/*',
+    'CLAUDE.md',
+    '*/CLAUDE.md',
 );
