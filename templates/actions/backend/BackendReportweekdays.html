@@ -1,46 +1,33 @@
 {$weekdays_for_best = [_wp("Monday"), _wp("Tuesday"), _wp("Wednesday"), _wp("Thursday"), _wp("Friday"), _wp("Saturday"), _wp("Sunday")]}
-<style>
-    .s-plugin-syrreporders-settings-block { border:1px solid #ccc; -webkit-box-shadow: 3px 3px 3px 0 #bbb;box-shadow: 3px 3px 3px 0 #bbb; }
-    .s-plugin-syrreporders-settings-block fieldset { background-color: transparent }
-    .s-plugin-syrreporders-settings-block fieldset legend { background-color:#e9e9e9 }
-    .s-plugin-syrreporders-settings-block fieldset .divider-top { border-top:1px solid #e9e9e9 }
-</style>
 
 <div class="block double-padded">
     <div class="content">
-        <div id="reports-dow-orders" class="s-graph" style="position:relative;height:300px;">
+        <div id="reports-dow-orders" class="syrreporders-chart-container">
             <canvas id="syr-weekdays-chart"></canvas>
         </div>
         <div class="block">
             <div class="sidebar left400px">
                 <div id="reports-weekdays-controls" class="block padded" style="padding-top: 0">
-                    <div class="block s-plugin-syrreporders-settings-block">
+                    <div class="block syrreporders-settings-block">
                         <h2>{_wp("Best Weekdays")}</h2>
                         <div class="fields">
                             <div class="field-group">
                                 <div class="field">
                                     <div class="name">{_wp('Max number of orders')}</div>
                                     <div class="value">
-                                    {foreach $stats.dow.top.count as $dow}
-                                    {if !$dow@first}, {/if}
-                                    {$weekdays_for_best[$dow.dow]}
-                                    {/foreach}
+                                        {foreach $stats.dow.top.count as $dow}{if !$dow@first}, {/if}{$weekdays_for_best[$dow.dow]}{/foreach}
                                     </div>
                                 </div>
                                 <div class="field">
                                     <div class="name">{_wp('Max total amount')}</div>
                                     <div class="value">
-                                    {foreach $stats.dow.top.sum as $dow}
-                                    {if !$dow@first}, {/if}
-                                    {$weekdays_for_best[$dow.dow]}
-                                    {/foreach}
+                                        {foreach $stats.dow.top.sum as $dow}{if !$dow@first}, {/if}{$weekdays_for_best[$dow.dow]}{/foreach}
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="clear-both"></div>
                     </div>
-                        <div class="block s-plugin-syrreporders-settings-block" style="margin-top:10px">
+                    <div class="block syrreporders-settings-block" style="margin-top:10px">
                         <h2>{_wp('Filters')}</h2>
                         <form id="syrRepOrdersSettingsForm">
                             <input type="hidden" name="report" value="weekdays">
@@ -52,13 +39,13 @@
                                 {foreach $all_order_states as $os=>$osopts}
                                     <div class="value">
                                         <label>
-                                            <input type="checkbox" name="weekdays_state[]" value="{$os}" {if in_array($os, $weekdays_states)} checked="checked"{/if}>
-                                            <span style="{foreach $osopts["options"]["style"] as $osstyle=>$osstyleval}{$osstyle}:{$osstyleval};{/foreach}">{$osopts.name}</span>
+                                            <input type="checkbox" name="weekdays_state[]" value="{$os}"{if in_array($os, $weekdays_states)} checked{/if}>
+                                            <span style="{foreach $osopts["options"]["style"] as $k=>$v}{$k}:{$v};{/foreach}">{$osopts.name}</span>
                                         </label>
                                     </div>
                                 {/foreach}
                             </div>
-                            <div style="border-top:1px solid #e9e9e9;text-align: center;margin-top: 10px;padding-top: 10px;">
+                            <div class="syrreporders-btn-row">
                                 <button type="button" class="green button" id="s-plugin-syrorders-refresh-btn">{_wp('Refresh')}</button>
                             </div>
                         </form>
@@ -88,28 +75,15 @@
                 </div>
             </div>
         </div>
+        <div class="clear-both"></div>
     </div>
 </div>
-<script type="text/javascript">
-(function() {
 
-    document.title = '{_wp("Weekdays")|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}';
-
-    var formatCurrency = function(value) {
-        {if $currency eq 'RUB'}
-        return value.toFixed(2) + ' руб.';
-        {elseif $currency eq 'USD'}
-        return '$' + value.toFixed(2);
-        {elseif $currency eq 'EUR'}
-        return '€' + value.toFixed(2);
-        {elseif $currency eq 'UAH'}
-        return value.toFixed(2) + ' грн.';
-        {else}
-        return value.toFixed(2);
-        {/if}
-    };
-
-    var weekdayNames = [
+<script>
+document.title = '{_wp("Weekdays")|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}';
+new SyrrepordersWeekdaysChart({
+    currency: '{$currency|escape:'javascript'}',
+    weekdayNames: [
         '{_wp("Monday")|escape:"javascript"}',
         '{_wp("Tuesday")|escape:"javascript"}',
         '{_wp("Wednesday")|escape:"javascript"}',
@@ -117,94 +91,12 @@
         '{_wp("Friday")|escape:"javascript"}',
         '{_wp("Saturday")|escape:"javascript"}',
         '{_wp("Sunday")|escape:"javascript"}'
-    ];
-
-    var dowData = {json_encode($stats.dow.data)};
-    dowData.sort(function(a, b) { return parseInt(a.dow) - parseInt(b.dow); });
-
-    var labels = dowData.map(function(d) { return weekdayNames[parseInt(d.dow)]; });
-    var totals = dowData.map(function(d) { return parseFloat(d.total); });
-    var counts = dowData.map(function(d) { return parseFloat(d.count); });
-
-    new Chart(document.getElementById('syr-weekdays-chart'), {
-        type: 'bar',
-        data: {
-            labels: labels,
-            datasets: [
-                {
-                    label: '{_wp("Totals")|escape:"javascript"}',
-                    data: totals,
-                    backgroundColor: 'rgba(18,157,14,0.7)',
-                    borderColor: '#129d0e',
-                    borderWidth: 1,
-                    yAxisID: 'y1'
-                },
-                {
-                    label: '{_wp("Number of orders")|escape:"javascript"}',
-                    data: counts,
-                    backgroundColor: 'rgba(59,125,192,0.7)',
-                    borderColor: '#3b7dc0',
-                    borderWidth: 1,
-                    yAxisID: 'y2'
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            animation: { duration: 500 },
-            plugins: {
-                title: {
-                    display: true,
-                    text: '{_wp("Orders by Weekdays")|escape:"javascript"}'
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            var label = context.dataset.label + ': ';
-                            if (context.dataset.yAxisID === 'y2') {
-                                label += Math.round(context.parsed.y);
-                            } else {
-                                label += formatCurrency(context.parsed.y);
-                            }
-                            return label;
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    grid: { color: '#eeeeee' }
-                },
-                y1: {
-                    type: 'linear',
-                    position: 'left',
-                    min: 0,
-                    grid: { color: '#eeeeee' },
-                    ticks: {
-                        callback: function(value) { return formatCurrency(value); }
-                    }
-                },
-                y2: {
-                    type: 'linear',
-                    position: 'right',
-                    min: 0,
-                    grid: { drawOnChartArea: false },
-                    ticks: {
-                        callback: function(value) { return Math.round(value); }
-                    }
-                }
-            }
-        }
-    });
-
-    $("#s-plugin-syrorders-refresh-btn").click(function() {
-        $('#s-plugin-syrorders-refresh-btn').prop("disabled", true);
-        $.post('?plugin=syrreporders&action=setreppref', $("#syrRepOrdersSettingsForm").serialize())
-            .always(function() {
-                $.reports.syrweekdaysAction();
-            });
-    });
-
-})();
+    ],
+    labels: {
+        title:  '{_wp("Orders by Weekdays")|escape:"javascript"}',
+        totals: '{_wp("Totals")|escape:"javascript"}',
+        count:  '{_wp("Number of orders")|escape:"javascript"}'
+    },
+    data: {json_encode($stats.dow.data)}
+});
 </script>

@@ -1,18 +1,12 @@
-<style>
-    #s-plugin-syrreporders-settings-block { border:1px solid #ccc; -webkit-box-shadow: 3px 3px 3px 0 #bbb;box-shadow: 3px 3px 3px 0 #bbb; }
-    #s-plugin-syrreporders-settings-block fieldset { background-color: transparent }
-    #s-plugin-syrreporders-settings-block fieldset legend { background-color:#e9e9e9 }
-    #s-plugin-syrreporders-settings-block fieldset .divider-top { border-top:1px solid #e9e9e9 }
-</style>
 <div class="block double-padded">
     <div class="content">
-        <div id="reports-orders-graph" class="s-graph" style="position:relative;height:300px;">
+        <div id="reports-orders-graph" class="syrreporders-chart-container">
             <canvas id="syr-orders-chart"></canvas>
         </div>
         <div class="block double-padded">
             <div class="sidebar left400px">
                 <div id="reports-orders-controls" class="block padded" style="padding-top: 0">
-                    <div class="block" id="s-plugin-syrreporders-settings-block">
+                    <div class="block syrreporders-settings-block">
                         <h2>{_wp('Chart settings')}</h2>
                         <form id="syrRepOrdersSettingsForm" method="post">
                             <input type="hidden" name="report" value="orders">
@@ -20,53 +14,49 @@
                                 <fieldset>
                                     <legend>{_wp('Display')}</legend>
                                     <div class="field">
-                                        <div class="name">
-                                            {_wp("Orders")}
-                                        </div>
+                                        <div class="name">{_wp("Orders")}</div>
                                         <div class="value">
                                             <input type="hidden" name="orders_graph[count]" value="0">
                                             <label>
-                                                <input type="checkbox" name="orders_graph[count]" data-serie="0" data-column="count"{if $orders_graph['count']} checked="checked"{/if} value="1">
+                                                <input type="checkbox" name="orders_graph[count]" data-serie="0" data-column="count" value="1"{if $orders_graph['count']} checked{/if}>
                                                 <span style="color:#3b7dc0">{_wp('Number of orders')}</span>
                                             </label>
                                         </div>
                                     </div>
                                     <div class="field divider-top">
-                                        <div class="name">
-                                            {_wp('Money')}
-                                        </div>
+                                        <div class="name">{_wp('Money')}</div>
                                         <div class="value">
                                             <input type="hidden" name="orders_graph[totals]" value="0">
                                             <label>
-                                                <input type="checkbox" name="orders_graph[totals]" data-serie="1"{if $orders_graph['totals']} checked="checked"{/if} data-column="totals" value="1">
+                                                <input type="checkbox" name="orders_graph[totals]" data-serie="1" data-column="totals" value="1"{if $orders_graph['totals']} checked{/if}>
                                                 <span style="color:#129d0e">{_wp('Totals')}</span>
                                             </label>
                                         </div>
                                         <div class="value">
                                             <input type="hidden" name="orders_graph[shipping]" value="0">
                                             <label>
-                                                <input type="checkbox" name="orders_graph[shipping]" data-serie="2"{if $orders_graph['shipping']} checked="checked"{/if} data-column="shipping" value="1">
+                                                <input type="checkbox" name="orders_graph[shipping]" data-serie="2" data-column="shipping" value="1"{if $orders_graph['shipping']} checked{/if}>
                                                 <span style="color:#a38717">{_wp('Shipping Total')}</span>
                                             </label>
                                         </div>
                                         <div class="value">
                                             <input type="hidden" name="orders_graph[discount]" value="0">
                                             <label>
-                                                <input type="checkbox" name="orders_graph[discount]" data-serie="3"{if $orders_graph['discount']} checked="checked"{/if} data-column="discount" value="1">
+                                                <input type="checkbox" name="orders_graph[discount]" data-serie="3" data-column="discount" value="1"{if $orders_graph['discount']} checked{/if}>
                                                 <span style="color:#ac3562">{_wp('Discount Total')}</span>
                                             </label>
                                         </div>
                                         <div class="value">
                                             <input type="hidden" name="orders_graph[tax]" value="0">
                                             <label>
-                                                <input type="checkbox" name="orders_graph[tax]" data-serie="4"{if $orders_graph['tax']} checked="checked"{/if} data-column="tax" value="1">
+                                                <input type="checkbox" name="orders_graph[tax]" data-serie="4" data-column="tax" value="1"{if $orders_graph['tax']} checked{/if}>
                                                 <span style="color:#1ba17a">{_wp('Tax Total')}</span>
                                             </label>
                                         </div>
                                         <div class="value">
                                             <input type="hidden" name="orders_graph[avg_ticket_price]" value="0">
                                             <label>
-                                                <input type="checkbox" name="orders_graph[avg_ticket_price]" data-serie="5"{if $orders_graph['avg_ticket_price']} checked="checked"{/if} data-column="avg_ticket_price" value="1">
+                                                <input type="checkbox" name="orders_graph[avg_ticket_price]" data-serie="5" data-column="avg_ticket_price" value="1"{if $orders_graph['avg_ticket_price']} checked{/if}>
                                                 <span style="color:#87469f">{_wp('Average ticket price')}</span>
                                             </label>
                                         </div>
@@ -82,8 +72,8 @@
                                         {foreach $orderStates as $os=>$osopts}
                                             <div class="value">
                                                 <label>
-                                                    <input type="checkbox" name="orders_state[]" value="{$os}" data-update="1"{if in_array($os, $orders_states)} checked="checked"{/if}>
-                                                    <span style="{foreach $osopts["options"]["style"] as $osstyle=>$osstyleval}{$osstyle}:{$osstyleval};{/foreach}">{$osopts.name}</span>
+                                                    <input type="checkbox" name="orders_state[]" value="{$os}" data-update="1"{if in_array($os, $orders_states)} checked{/if}>
+                                                    <span style="{foreach $osopts["options"]["style"] as $k=>$v}{$k}:{$v};{/foreach}">{$osopts.name}</span>
                                                 </label>
                                             </div>
                                         {/foreach}
@@ -100,44 +90,26 @@
                     <table class="zebra" id="syrRepOrdersTableValues">
                         <thead>
                             <tr>
-                                <th style="text-align: center">
-                                    {if $group_by == 'months'}
-                                        {_wp('Month')}
-                                    {else}
-                                        {_wp('Date')}
-                                    {/if}
-                                </th>
-                                <th style="text-align: center;{if not $orders_graph['count']} display:none;{/if}" class="col-count">
-                                    {_wp('Number of orders')}
-                                </th>
-                                <th style="text-align: center;{if not $orders_graph['totals']} display:none;{/if}" class="col-totals">
-                                    {_wp('Totals')}
-                                </th>
-                                <th style="text-align: center;{if not $orders_graph['shipping']} display:none;{/if}" class="col-shipping">
-                                    {_wp('Shipping Total')}
-                                </th>
-                                <th style="text-align: center;{if not $orders_graph['discount']} display:none;{/if}" class="col-discount">
-                                    {_wp('Discounts Total')}
-                                </th>
-                                <th style="text-align: center;{if not $orders_graph['tax']} display:none;{/if}" class="col-tax">
-                                    {_wp('Taxes Total')}
-                                </th>
-                                <th style="text-align: center;{if not $orders_graph['avg_ticket_price']} display:none;{/if}" class="col-avg_ticket_price">
-                                    {_wp('Average ticket price')}
-                                </th>
+                                <th>{if $group_by == 'months'}{_wp('Month')}{else}{_wp('Date')}{/if}</th>
+                                <th class="col-count"{if not $orders_graph['count']} style="display:none"{/if}>{_wp('Number of orders')}</th>
+                                <th class="col-totals"{if not $orders_graph['totals']} style="display:none"{/if}>{_wp('Totals')}</th>
+                                <th class="col-shipping"{if not $orders_graph['shipping']} style="display:none"{/if}>{_wp('Shipping Total')}</th>
+                                <th class="col-discount"{if not $orders_graph['discount']} style="display:none"{/if}>{_wp('Discounts Total')}</th>
+                                <th class="col-tax"{if not $orders_graph['tax']} style="display:none"{/if}>{_wp('Taxes Total')}</th>
+                                <th class="col-avg_ticket_price"{if not $orders_graph['avg_ticket_price']} style="display:none"{/if}>{_wp('Average ticket price')}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {foreach $table_data as $row }
+                            {foreach $table_data as $row}
                                 {if $row['count'] > 0}
                                     <tr>
                                         <td>{$row['date']|wa_date}</td>
-                                        <td style="text-align: right;{if not $orders_graph['count']}display:none;{/if}" class="col-count">{$row['count']}</td>
-                                        <td style="text-align: right;{if not $orders_graph['totals']} display:none;{/if}" class="col-totals">{$row['total']|wa_format_amount_currency:$currency}</td>
-                                        <td style="text-align: right;{if not $orders_graph['shipping']} display:none;{/if}" class="col-shipping">{$row['shipping']|wa_format_amount_currency:$currency}</td>
-                                        <td style="text-align: right;{if not $orders_graph['discount']} display:none;{/if}" class="col-discount">{$row['discount']|wa_format_amount_currency:$currency}</td>
-                                        <td style="text-align: right;{if not $orders_graph['tax']} display:none;{/if}" class="col-tax">{$row['tax']|wa_format_amount_currency:$currency}</td>
-                                        <td style="text-align: right;{if not $orders_graph['avg_ticket_price']} display:none;{/if}" class="col-tax">{$row['avg_ticket_price']|wa_format_amount_currency:$currency}</td>
+                                        <td class="col-count" style="text-align:right{if not $orders_graph['count']};display:none{/if}">{$row['count']}</td>
+                                        <td class="col-totals" style="text-align:right{if not $orders_graph['totals']};display:none{/if}">{$row['total']|wa_format_amount_currency:$currency}</td>
+                                        <td class="col-shipping" style="text-align:right{if not $orders_graph['shipping']};display:none{/if}">{$row['shipping']|wa_format_amount_currency:$currency}</td>
+                                        <td class="col-discount" style="text-align:right{if not $orders_graph['discount']};display:none{/if}">{$row['discount']|wa_format_amount_currency:$currency}</td>
+                                        <td class="col-tax" style="text-align:right{if not $orders_graph['tax']};display:none{/if}">{$row['tax']|wa_format_amount_currency:$currency}</td>
+                                        <td class="col-avg_ticket_price" style="text-align:right{if not $orders_graph['avg_ticket_price']};display:none{/if}">{$row['avg_ticket_price']|wa_format_amount_currency:$currency}</td>
                                     </tr>
                                 {/if}
                             {/foreach}
@@ -152,170 +124,35 @@
 </div>
 <div class="clear-both"></div>
 
-<script type="text/javascript">
-(function() {
-
-    document.title = '{_wp("Order Report")|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}';
-
-    var formatCurrency = function(value) {
-        {if $currency eq 'RUB'}
-        return value.toFixed(2) + ' руб.';
-        {elseif $currency eq 'USD'}
-        return '$' + value.toFixed(2);
-        {elseif $currency eq 'EUR'}
-        return '€' + value.toFixed(2);
-        {elseif $currency eq 'UAH'}
-        return value.toFixed(2) + ' грн.';
-        {else}
-        return value.toFixed(2);
-        {/if}
-    };
-
-    var toPoints = function(arr) {
-        return arr.map(function(p) { return { x: p[0], y: p[1] }; });
-    };
-
-    var ordersChart = new Chart(document.getElementById('syr-orders-chart'), {
-        type: 'line',
-        data: {
-            datasets: [
-                {
-                    label: '{_wp("Number of orders")|escape:'javascript'}',
-                    data: toPoints({json_encode($chart_data['count'])}),
-                    borderColor: '#3b7dc0',
-                    backgroundColor: 'rgba(59,125,192,0.1)',
-                    yAxisID: 'y2',
-                    borderWidth: 3,
-                    pointRadius: 2,
-                    fill: true,
-                    hidden: {if $orders_graph['count']}false{else}true{/if}
-                },
-                {
-                    label: '{_wp("Totals")|escape:'javascript'}',
-                    data: toPoints({json_encode($chart_data['sales'])}),
-                    borderColor: '#129d0e',
-                    backgroundColor: 'rgba(18,157,14,0.1)',
-                    yAxisID: 'y1',
-                    borderWidth: 3,
-                    pointRadius: 2,
-                    fill: true,
-                    hidden: {if $orders_graph['totals']}false{else}true{/if}
-                },
-                {
-                    label: '{_wp("Shipping Total")|escape:'javascript'}',
-                    data: toPoints({json_encode($chart_data['shipping'])}),
-                    borderColor: '#a38717',
-                    backgroundColor: 'rgba(163,135,23,0.1)',
-                    yAxisID: 'y1',
-                    borderWidth: 3,
-                    pointRadius: 2,
-                    fill: true,
-                    hidden: {if $orders_graph['shipping']}false{else}true{/if}
-                },
-                {
-                    label: '{_wp("Discount Total")|escape:'javascript'}',
-                    data: toPoints({json_encode($chart_data['discount'])}),
-                    borderColor: '#ac3562',
-                    backgroundColor: 'rgba(172,53,98,0.1)',
-                    yAxisID: 'y1',
-                    borderWidth: 3,
-                    pointRadius: 2,
-                    fill: true,
-                    hidden: {if $orders_graph['discount']}false{else}true{/if}
-                },
-                {
-                    label: '{_wp("Tax Total")|escape:'javascript'}',
-                    data: toPoints({json_encode($chart_data['tax'])}),
-                    borderColor: '#1ba17a',
-                    backgroundColor: 'rgba(27,161,122,0.1)',
-                    yAxisID: 'y1',
-                    borderWidth: 3,
-                    pointRadius: 2,
-                    fill: true,
-                    hidden: {if $orders_graph['tax']}false{else}true{/if}
-                },
-                {
-                    label: '{_wp("Average ticket price")|escape:'javascript'}',
-                    data: toPoints({json_encode($chart_data['avg_ticket_price'])}),
-                    borderColor: '#87469f',
-                    backgroundColor: 'rgba(135,70,159,0.1)',
-                    yAxisID: 'y1',
-                    borderWidth: 3,
-                    pointRadius: 2,
-                    fill: true,
-                    hidden: {if $orders_graph['avg_ticket_price']}false{else}true{/if}
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            interaction: {
-                mode: 'index',
-                intersect: false
-            },
-            plugins: {
-                legend: { display: false },
-                title: {
-                    display: true,
-                    text: '{_wp("Orders")|escape:'javascript'}'
-                },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            var label = context.dataset.label + ': ';
-                            if (context.dataset.yAxisID === 'y2') {
-                                label += Math.round(context.parsed.y);
-                            } else {
-                                label += formatCurrency(context.parsed.y);
-                            }
-                            return label;
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    type: 'time',
-                    time: {
-                        unit: '{if $group_by == 'days'}day{else}month{/if}',
-                        displayFormats: {
-                            day: 'dd MMM',
-                            month: 'MMM yyyy'
-                        }
-                    },
-                    grid: { color: '#eeeeee' },
-                    ticks: { maxTicksLimit: 35 }
-                },
-                y1: {
-                    type: 'linear',
-                    position: 'left',
-                    min: 0,
-                    grid: { color: '#eeeeee' },
-                    ticks: {
-                        callback: function(value) { return formatCurrency(value); }
-                    }
-                },
-                y2: {
-                    type: 'linear',
-                    position: 'right',
-                    min: 0,
-                    grid: { drawOnChartArea: false },
-                    ticks: {
-                        callback: function(value) { return Math.round(value); }
-                    }
-                }
-            }
-        }
-    });
-
-    $("#s-plugin-syrorders-refresh-btn").click(function() {
-        $('#s-plugin-syrorders-refresh-btn').prop("disabled", true);
-        $.post('?plugin=syrreporders&action=setreppref', $("#syrRepOrdersSettingsForm").serialize())
-            .always(function() {
-                $.reports.syrordersAction();
-            });
-    });
-
-})();
+<script>
+document.title = '{_wp("Order Report")|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}';
+new SyrrepordersOrdersChart({
+    currency: '{$currency|escape:'javascript'}',
+    groupBy:  '{$group_by|escape:'javascript'}',
+    labels: {
+        title:            '{_wp("Orders")|escape:'javascript'}',
+        count:            '{_wp("Number of orders")|escape:'javascript'}',
+        totals:           '{_wp("Totals")|escape:'javascript'}',
+        shipping:         '{_wp("Shipping Total")|escape:'javascript'}',
+        discount:         '{_wp("Discount Total")|escape:'javascript'}',
+        tax:              '{_wp("Tax Total")|escape:'javascript'}',
+        avg_ticket_price: '{_wp("Average ticket price")|escape:'javascript'}'
+    },
+    hidden: {
+        count:            {if $orders_graph['count']}false{else}true{/if},
+        totals:           {if $orders_graph['totals']}false{else}true{/if},
+        shipping:         {if $orders_graph['shipping']}false{else}true{/if},
+        discount:         {if $orders_graph['discount']}false{else}true{/if},
+        tax:              {if $orders_graph['tax']}false{else}true{/if},
+        avg_ticket_price: {if $orders_graph['avg_ticket_price']}false{else}true{/if}
+    },
+    data: {json_encode([
+        'count'           => ifset($chart_data['count'], []),
+        'sales'           => ifset($chart_data['sales'], []),
+        'shipping'        => ifset($chart_data['shipping'], []),
+        'discount'        => ifset($chart_data['discount'], []),
+        'tax'             => ifset($chart_data['tax'], []),
+        'avg_ticket_price'=> ifset($chart_data['avg_ticket_price'], [])
+    ])}
+});
 </script>

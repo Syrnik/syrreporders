@@ -1,0 +1,28 @@
+.syrreporders-chart-container {
+    position: relative;
+    height: 300px;
+}
+
+.syrreporders-settings-block {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px 0 #bbb;
+}
+
+.syrreporders-settings-block fieldset {
+    background-color: transparent;
+}
+
+.syrreporders-settings-block fieldset legend {
+    background-color: #e9e9e9;
+}
+
+.syrreporders-settings-block .divider-top {
+    border-top: 1px solid #e9e9e9;
+}
+
+.syrreporders-btn-row {
+    border-top: 1px solid #e9e9e9;
+    text-align: center;
+    margin-top: 10px;
+    padding-top: 10px;
+}
