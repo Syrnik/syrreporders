@@ -1,0 +1,129 @@
+<div class="block double-padded">
+    <div class="content">
+        <div id="reports-orders-graph" class="syrreporders-chart-container">
+            <canvas id="syr-orders-chart"></canvas>
+        </div>
+        <div class="block double-padded">
+            <div class="sidebar left400px">
+                <div id="reports-orders-controls" class="padded">
+                    <div class="syrreporders-settings-block">
+                        <h2>{_wp('Chart settings')}</h2>
+                        <form id="syrRepOrdersSettingsForm" method="post">
+                            <input type="hidden" name="report" value="orders">
+                            <div class="fields">
+                                <fieldset>
+                                    <legend>{_wp('Display')}</legend>
+                                    <div class="field">
+                                        <div class="name">{_wp("Orders")}</div>
+                                        <div class="value">
+                                            <input type="hidden" name="orders_graph[count]" value="0">
+                                            <label>
+                                                <input type="checkbox" name="orders_graph[count]" data-serie="0" data-column="count" value="1" checked>
+                                                <span class="syrreporders-color-count">{_wp('Number of orders')}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="field divider-top">
+                                        <div class="name">{_wp('Money')}</div>
+                                        <div class="value">
+                                            <input type="hidden" name="orders_graph[totals]" value="0">
+                                            <label>
+                                                <input type="checkbox" name="orders_graph[totals]" data-serie="1" data-column="totals" value="1" checked>
+                                                <span class="syrreporders-color-totals">{_wp('Totals')}</span>
+                                            </label>
+                                        </div>
+                                        <div class="value">
+                                            <input type="hidden" name="orders_graph[shipping]" value="0">
+                                            <label>
+                                                <input type="checkbox" name="orders_graph[shipping]" data-serie="2" data-column="shipping" value="1" checked>
+                                                <span class="syrreporders-color-shipping">{_wp('Shipping Total')}</span>
+                                            </label>
+                                        </div>
+                                        <div class="value">
+                                            <input type="hidden" name="orders_graph[discount]" value="0">
+                                            <label>
+                                                <input type="checkbox" name="orders_graph[discount]" data-serie="3" data-column="discount" value="1" checked>
+                                                <span class="syrreporders-color-discount">{_wp('Discount Total')}</span>
+                                            </label>
+                                        </div>
+                                        <div class="value">
+                                            <input type="hidden" name="orders_graph[tax]" value="0">
+                                            <label>
+                                                <input type="checkbox" name="orders_graph[tax]" data-serie="4" data-column="tax" value="1" checked>
+                                                <span class="syrreporders-color-tax">{_wp('Tax Total')}</span>
+                                            </label>
+                                        </div>
+                                        <div class="value">
+                                            <input type="hidden" name="orders_graph[avg_ticket_price]" value="0">
+                                            <label>
+                                                <input type="checkbox" name="orders_graph[avg_ticket_price]" data-serie="5" data-column="avg_ticket_price" value="1" checked>
+                                                <span class="syrreporders-color-avg_ticket_price">{_wp('Average ticket price')}</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <legend>{_wp('Filter')}</legend>
+                                    <div class="field">
+                                        <div class="name">
+                                            {_wp("Order statuses")}
+                                            <p class="hint">{_wp('Count the statistics for the orders with the specified statuses only')}</p>
+                                        </div>
+                                        {foreach $orderStates as $os=>$osopts}
+                                            <div class="value">
+                                                <label>
+                                                    <input type="checkbox" name="orders_state[]" value="{$os}" checked>
+                                                    <span style="{foreach $osopts["options"]["style"] as $k=>$v}{$k}:{$v};{/foreach}">{$osopts.name}</span>
+                                                </label>
+                                            </div>
+                                        {/foreach}
+                                    </div>
+                                </fieldset>
+                                <button type="button" class="green button" id="s-plugin-syrorders-refresh-btn">{_wp('Refresh')}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="content left400px">
+                <div class="padded">
+                    <table class="zebra" id="syrRepOrdersTableValues">
+                        <thead>
+                            <tr>
+                                <th>{if $group_by == 'months'}{_wp('Month')}{else}{_wp('Date')}{/if}</th>
+                                <th class="col-count">{_wp('Number of orders')}</th>
+                                <th class="col-totals">{_wp('Totals')}</th>
+                                <th class="col-shipping">{_wp('Shipping Total')}</th>
+                                <th class="col-discount">{_wp('Discounts Total')}</th>
+                                <th class="col-tax">{_wp('Taxes Total')}</th>
+                                <th class="col-avg_ticket_price">{_wp('Average ticket price')}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="clear-both"></div>
+            </div>
+        </div>
+        <div class="clear-both"></div>
+    </div>
+</div>
+<div class="clear-both"></div>
+
+<script>
+document.title = '{_wp("Order Report")|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}';
+new SyrrepordersOrdersChart({
+    currency: {$currency|json_encode:256},
+    groupBy:  {$group_by|json_encode:256},
+    labels: {
+        title:            {_wp("Orders")|json_encode:256},
+        count:            {_wp("Number of orders")|json_encode:256},
+        totals:           {_wp("Totals")|json_encode:256},
+        shipping:         {_wp("Shipping Total")|json_encode:256},
+        discount:         {_wp("Discount Total")|json_encode:256},
+        tax:              {_wp("Tax Total")|json_encode:256},
+        avg_ticket_price: {_wp("Average ticket price")|json_encode:256}
+    }
+});
+</script>

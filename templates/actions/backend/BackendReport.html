@@ -1,144 +1,166 @@
-<style>
-    #s-plugin-syrreporders-settings-block { border:1px solid #ccc; -webkit-box-shadow: 3px 3px 3px 0 #bbb;box-shadow: 3px 3px 3px 0 #bbb; }
-    #s-plugin-syrreporders-settings-block fieldset { background-color: transparent }
-    #s-plugin-syrreporders-settings-block fieldset legend { background-color:#e9e9e9 }
-    #s-plugin-syrreporders-settings-block fieldset .divider-top { border-top:1px solid #e9e9e9 }
-</style>
-<div class="block double-padded">
+{include "./sales_sidebar.html" inline}
+
+<div class="box">
     <div class="content">
-        <div id="reports-orders-graph" class="s-graph"></div>
-        <div class="block double-padded">
-            <div class="sidebar left400px">
-                <div id="reports-orders-controls" class="block padded" style="padding-top: 0">
-                    <div class="block" id="s-plugin-syrreporders-settings-block">
-                        <h2>{_wp('Chart settings')}</h2>
-                        <form id="syrRepOrdersSettingsForm" method="post">
-                            <input type="hidden" name="report" value="orders">
-                            <div class="fields">
-                                <fieldset>
-                                    <legend>{_wp('Display')}</legend>
-                                    <div class="field">
-                                        <div class="name">
-                                            {_wp("Orders")}
-                                        </div>
-                                        <div class="value">
-                                            <input type="hidden" name="orders_graph[count]" value="0">
-                                            <label>
-                                                <input type="checkbox" name="orders_graph[count]" data-serie="0" data-column="count"{if $orders_graph['count']} checked="checked"{/if} value="1">
-                                                <span style="color:#3b7dc0">{_wp('Number of orders')}</span>
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="field divider-top">
-                                        <div class="name">
-                                            {_wp('Money')}
-                                        </div>
-                                        <div class="value">
+        <div id="reports-orders-graph" class="syrreporders-chart-container">
+            <canvas id="syr-orders-chart"></canvas>
+        </div>
+        <div class="flexbox custom-mt-32">
+            <div class="sidebar width-26rem">
+                <div id="reports-orders-controls" class="box">
+                    <h3 class="semibold">{_wp('Chart settings')}</h3>
+                    <form id="syrRepOrdersSettingsForm" method="post" class="fields">
+                        <input type="hidden" name="report" value="orders">
+                        <fieldset>
+                            <legend>{_wp('Display')}</legend>
+                            <div class="field">
+                                <div class="name">{_wp("Orders")}</div>
+                                <div class="value">
+                                    <input type="hidden" name="orders_graph[count]" value="0">
+
+                                    <label>
+                                        <span class="wa-checkbox">
+                                            <input type="checkbox" name="orders_graph[count]" data-serie="0" data-column="count" value="1" checked>
+                                            <span>
+                                                <span class="icon">
+                                                    <i class="fas fa-check"></i>
+                                                </span>
+                                            </span>
+                                        </span>
+                                        <span class="syrreporders-color-count">{_wp('Number of orders')}</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="field divider-top">
+                                <div class="name for-checkbox">{_wp('Money')}</div>
+                                <div class="value">
+                                    <ul>
+                                        <li>
                                             <input type="hidden" name="orders_graph[totals]" value="0">
                                             <label>
-                                                <input type="checkbox" name="orders_graph[totals]" data-serie="1"{if $orders_graph['totals']} checked="checked"{/if} data-column="totals" value="1">
-                                                <span style="color:#129d0e">{_wp('Totals')}</span>
+                                                <span class="wa-checkbox">
+                                                    <input type="checkbox" name="orders_graph[totals]" data-serie="1" data-column="totals" value="1" checked>
+                                                    <span>
+                                                        <span class="icon">
+                                                            <i class="fas fa-check"></i>
+                                                        </span>
+                                                    </span>
+                                                </span>
+                                                <span class="syrreporders-color-totals">{_wp('Totals')}</span>
                                             </label>
-                                        </div>
-                                        <div class="value">
+                                        </li>
+                                        <li>
                                             <input type="hidden" name="orders_graph[shipping]" value="0">
                                             <label>
-                                                <input type="checkbox" name="orders_graph[shipping]" data-serie="2"{if $orders_graph['shipping']} checked="checked"{/if} data-column="shipping" value="1">
-                                                <span style="color:#a38717">{_wp('Shipping Total')}</span>
+                                                <span class="wa-checkbox">
+                                                    <input type="checkbox" name="orders_graph[shipping]" data-serie="2" data-column="shipping" value="1" checked>
+                                                    <span>
+                                                        <span class="icon">
+                                                            <i class="fas fa-check"></i>
+                                                        </span>
+                                                    </span>
+                                                </span>
+                                                <span class="syrreporders-color-shipping">{_wp('Shipping Total')}</span>
                                             </label>
-                                        </div>
-                                        <div class="value">
+                                        </li>
+                                        <li>
                                             <input type="hidden" name="orders_graph[discount]" value="0">
                                             <label>
-                                                <input type="checkbox" name="orders_graph[discount]" data-serie="3"{if $orders_graph['discount']} checked="checked"{/if} data-column="discount" value="1">
-                                                <span style="color:#ac3562">{_wp('Discount Total')}</span>
+                                                <span class="wa-checkbox">
+                                                    <input type="checkbox" name="orders_graph[discount]" data-serie="3" data-column="discount" value="1" checked>
+                                                    <span>
+                                                        <span class="icon">
+                                                            <i class="fas fa-check"></i>
+                                                        </span>
+                                                    </span>
+                                                </span>
+                                                <span class="syrreporders-color-discount">{_wp('Discount Total')}</span>
                                             </label>
-                                        </div>
-                                        <div class="value">
+                                        </li>
+                                        <li>
                                             <input type="hidden" name="orders_graph[tax]" value="0">
                                             <label>
-                                                <input type="checkbox" name="orders_graph[tax]" data-serie="4"{if $orders_graph['tax']} checked="checked"{/if} data-column="tax" value="1">
-                                                <span style="color:#1ba17a">{_wp('Tax Total')}</span>
+                                                <span class="wa-checkbox">
+                                                    <input type="checkbox" name="orders_graph[tax]" data-serie="4" data-column="tax" value="1" checked>
+                                                    <span>
+                                                        <span class="icon">
+                                                            <i class="fas fa-check"></i>
+                                                        </span>
+                                                    </span>
+                                                </span>
+                                                <span class="syrreporders-color-tax">{_wp('Tax Total')}</span>
                                             </label>
-                                        </div>
-                                        <div class="value">
+                                        </li>
+                                        <li>
                                             <input type="hidden" name="orders_graph[avg_ticket_price]" value="0">
                                             <label>
-                                                <input type="checkbox" name="orders_graph[avg_ticket_price]" data-serie="5"{if $orders_graph['avg_ticket_price']} checked="checked"{/if} data-column="avg_ticket_price" value="1">
-                                                <span style="color:#87469f">{_wp('Average ticket price')}</span>
+                                                <span class="wa-checkbox">
+                                                    <input type="checkbox" name="orders_graph[avg_ticket_price]" data-serie="5" data-column="avg_ticket_price" value="1" checked>
+                                                    <span>
+                                                        <span class="icon">
+                                                            <i class="fas fa-check"></i>
+                                                        </span>
+                                                    </span>
+                                                </span>
+                                                <span class="syrreporders-color-avg_ticket_price">{_wp('Average ticket price')}</span>
                                             </label>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <fieldset>
-                                    <legend>{_wp('Filter')}</legend>
-                                    <div class="field">
-                                        <div class="name">
-                                            {_wp("Order statuses")}
-                                            <p class="hint">{_wp('Count the statistics for the orders with the specified statuses only')}</p>
-                                        </div>
-                                        {foreach $orderStates as $os=>$osopts}
-                                            <div class="value">
-                                                <label>
-                                                    <input type="checkbox" name="orders_state[]" value="{$os}" data-update="1"{if in_array($os, $orders_states)} checked="checked"{/if}>
-                                                    <span style="{foreach $osopts["options"]["style"] as $osstyle=>$osstyleval}{$osstyle}:{$osstyleval};{/foreach}">{$osopts.name}</span>
-                                                </label>
-                                            </div>
-                                        {/foreach}
-                                    </div>
-                                </fieldset>
-                                <button type="button" class="green button" id="s-plugin-syrorders-refresh-btn">{_wp('Refresh')}</button>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
-                        </form>
-                    </div>
+                        </fieldset>
+                        <fieldset>
+                            <legend>{_wp('Filter')}</legend>
+                            <div class="field">
+                                <div class="name for-checkbox">
+                                    {_wp("Order statuses")}
+                                    <p class="hint">{_wp('Count the statistics for the orders with the specified statuses only')}</p>
+                                </div>
+                                <div class="value">
+                                    <ul>
+                                        {foreach $orderStates as $os=>$osopts}
+                                        <li class="small">
+                                            <label>
+                                                <span class="wa-checkbox">
+                                                    <input type="checkbox" name="orders_state[]" value="{$os}" checked>
+                                                    <span>
+                                                        <span class="icon">
+                                                            <i class="fas fa-check"></i>
+                                                        </span>
+                                                    </span>
+                                                </span>
+                                                <span style="{foreach $osopts["options"]["style"] as $k=>$v}{$k}:{$v};{/foreach}">{$osopts.name}</span>
+                                            </label>
+                                        </li>
+                                        {/foreach}
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </fieldset>
+                        <div class="submit field">
+                            <div class="value">
+                                <button type="button" class="button green" id="s-plugin-syrorders-refresh-btn">{_wp('Refresh')} <span class="icon js-syrorders-refresh-spinner" style="display: none"><i class="fas fa-spinner wa-animation-spin speed-1000"></i></span></button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div class="content left400px">
+            <div class="content">
                 <div class="padded">
                     <table class="zebra" id="syrRepOrdersTableValues">
                         <thead>
                             <tr>
-                                <th style="text-align: center">
-                                    {if $group_by == 'months'}
-                                        {_wp('Month')}
-                                    {else}
-                                        {_wp('Date')}
-                                    {/if}
-                                </th>
-                                <th style="text-align: center;{if not $orders_graph['count']} display:none;{/if}" class="col-count">
-                                    {_wp('Number of orders')}
-                                </th>
-                                <th style="text-align: center;{if not $orders_graph['totals']} display:none;{/if}" class="col-totals">
-                                    {_wp('Totals')}
-                                </th>
-                                <th style="text-align: center;{if not $orders_graph['shipping']} display:none;{/if}" class="col-shipping">
-                                    {_wp('Shipping Total')}
-                                </th>
-                                <th style="text-align: center;{if not $orders_graph['discount']} display:none;{/if}" class="col-discount">
-                                    {_wp('Discounts Total')}
-                                </th>
-                                <th style="text-align: center;{if not $orders_graph['tax']} display:none;{/if}" class="col-tax">
-                                    {_wp('Taxes Total')}
-                                </th>
-                                <th style="text-align: center;{if not $orders_graph['avg_ticket_price']} display:none;{/if}" class="col-avg_ticket_price">
-                                    {_wp('Average ticket price')}
-                                </th>
+                                <th>{if $group_by == 'months'}{_wp('Month')}{else}{_wp('Date')}{/if}</th>
+                                <th class="col-count">{_wp('Number of orders')}</th>
+                                <th class="col-totals">{_wp('Totals')}</th>
+                                <th class="col-shipping">{_wp('Shipping Total')}</th>
+                                <th class="col-discount">{_wp('Discounts Total')}</th>
+                                <th class="col-tax">{_wp('Taxes Total')}</th>
+                                <th class="col-avg_ticket_price">{_wp('Average ticket price')}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {foreach $table_data as $row }
-                                {if $row['count'] > 0}
-                                    <tr>
-                                        <td>{$row['date']|wa_date}</td>
-                                        <td style="text-align: right;{if not $orders_graph['count']}display:none;{/if}" class="col-count">{$row['count']}</td>
-                                        <td style="text-align: right;{if not $orders_graph['totals']} display:none;{/if}" class="col-totals">{$row['total']|wa_format_amount_currency:$currency}</td>
-                                        <td style="text-align: right;{if not $orders_graph['shipping']} display:none;{/if}" class="col-shipping">{$row['shipping']|wa_format_amount_currency:$currency}</td>
-                                        <td style="text-align: right;{if not $orders_graph['discount']} display:none;{/if}" class="col-discount">{$row['discount']|wa_format_amount_currency:$currency}</td>
-                                        <td style="text-align: right;{if not $orders_graph['tax']} display:none;{/if}" class="col-tax">{$row['tax']|wa_format_amount_currency:$currency}</td>
-                                        <td style="text-align: right;{if not $orders_graph['avg_ticket_price']} display:none;{/if}" class="col-tax">{$row['avg_ticket_price']|wa_format_amount_currency:$currency}</td>
-                                    </tr>
-                                {/if}
-                            {/foreach}
                         </tbody>
                     </table>
                 </div>
@@ -148,131 +170,20 @@
         <div class="clear-both"></div>
     </div>
 </div>
-<div class="clear-both"></div>
 
-<script type="text/javascript">
-(function() {
-
-    document.title = '{_wp("Order Report")|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}';
-    
-    {$cnt = count($chart_data['count'])};
-    {$scale = floor($cnt/35) + 1}   
-
-    var ordersReportPlot = $.jqplot("reports-orders-graph",
-        [
-            {json_encode($chart_data['count'])},
-            {json_encode($chart_data['sales'])},
-            {json_encode($chart_data['shipping'])},
-            {json_encode($chart_data['discount'])},
-            {json_encode($chart_data['tax'])},
-            {json_encode($chart_data['avg_ticket_price'])}
-        ], {
-        seriesColors : ["#3b7dc0", "#129d0e", "#a38717", "#ac3562", "#1ba17a", "#87469f", "#6b6b6b", "#686190", "#b2b000", "#00b1ab", "#76b300"],
-        seriesDefaults : {
-            shadow : false,
-            lineWidth : 3,
-            fill : true,
-            fillAlpha : 0.1,
-            fillAndStroke : true,
-            rendererOptions : {
-                highlightMouseOver : false,
-            },
-        },
-        series : [
-            {
-                yaxis : 'y2axis',
-                label : '{_wp("Quantity")|escape:'javascript'}'
-            },
-            {
-                yaxis : 'yaxis',
-                label : '{_wp("Money")|escape:'javascript'}'
-            },
-            {
-                yaxis : 'yaxis',
-                label : '{_wp("Shipping")|escape:'javascript'}'
-            },
-            {
-                yaxis : 'yaxis',
-                label : '{_wp("Discount")|escape:'javascript'}'
-            },
-            {
-                yaxis : 'yaxis',
-                label : '{_wp("Tax")|escape:'javascript'}'
-            },
-            {
-                yaxis : 'yaxis',
-                label : '{_wp("Average ticket price")|escape:'javascript'}'
-            },
-        ],
-        grid : {
-            borderWidth : 0,
-            background : '#ffffff',
-            gridLineColor : '#eeeeee',
-            shadow: false
-        },
-        axes:{
-            xaxis:{
-                renderer: $.jqplot.DateAxisRenderer,
-                showTickMarks: false,
-                tickOptions:{
-                    formatString: {if $group_by == 'days'}0{else}1{/if} ? '%b %Y' : '%b %d'
-                },
-                tickInterval: "{if $cnt <= 35}1 {if $group_by != 'days'}month{else}day{/if}{else}{$scale} {if $group_by != 'days'}months{else}days{/if}{/if}"
-            },
-            yaxis:{
-                min: 0,
-                showTicks: true,
-                showTickMarks: true,
-                tickOptions:{
-                    {if $currency eq 'RUB'}
-                        formatString:'%.2f руб.'
-                    {elseif $currency eq 'USD'}
-                        formatString:'$%.2f'
-                    {elseif $currency eq 'EUR'}
-                        formatString:'€%.2f'
-                    {elseif $currency eq 'UAH'}
-                        formatString:'%.2f грн.'
-                    {else}
-                        formatString:'%.2f'
-                    {/if}
-                }
-            },
-            y2axis:{
-                min: 0,
-                showTicks: true,
-                showTickMarks: false,
-                tickOptions:{
-                    formatString:'%d'
-                }
-            }
-        },
-        highlighter: {
-            show: true,
-            sizeAdjust: 7.5
-        },
-        cursor: {
-            show: false
-        },
-        legend:{
-            show: false,
-        },
-        title: "{_wp("Orders")|escape:'javascript'}"
-    });
-
-    $("#syrRepOrdersSettingsForm input[type=checkbox]").each(function(i){
-        if(!$(this).is(":checked")){
-            serie = parseInt($(this).data("serie"));
-            if(!isNaN(serie)){ ordersReportPlot.series[serie].show = false; }
-        }
-    });
-    ordersReportPlot.redraw(false);
-    
-    $("#s-plugin-syrorders-refresh-btn").click(function(){
-        $('#s-plugin-syrorders-refresh-btn').prop("disabled", true);
-        $.post('?plugin=syrreporders&action=setreppref', $("#syrRepOrdersSettingsForm").serialize(function(r){
-        })).always(function(){
-            $.reports.syrordersAction();
-        });
-    });
-    
-})();</script>
+<script>
+document.title = '{_wp("Order Report")|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}';
+new SyrrepordersOrdersChart({
+    currency: {$currency|json_encode:256},
+    groupBy:  {$group_by|json_encode:256},
+    labels: {
+        title:            {_wp("Orders")|json_encode:256},
+        count:            {_wp("Number of orders")|json_encode:256},
+        totals:           {_wp("Totals")|json_encode:256},
+        shipping:         {_wp("Shipping Total")|json_encode:256},
+        discount:         {_wp("Discount Total")|json_encode:256},
+        tax:              {_wp("Tax Total")|json_encode:256},
+        avg_ticket_price: {_wp("Average ticket price")|json_encode:256}
+    }
+});
+</script>

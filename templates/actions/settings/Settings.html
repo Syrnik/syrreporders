@@ -1,39 +1,58 @@
-
 <h1>{_wp("Additional Reports")}</h1>
 <div class="fields form">
-    <form action="?plugin=syrreporders&action=save" method="post" id="plugins-settings-form">
-        {$wa->csrf()}
+    <form action="?plugin=syrreporders&action=save" method="post" id="plugins-settings-form" class="fields">
         <div class="field">
             <div class="name">
                 {_wp("Reports")}
                 <p class="hint">{_wp("Select the reports you need")}</p>
             </div>
             <div class="value">
-                <label>
-                    <input type="checkbox" name="shop_syrreporders[report_orders]" value="1"
-                           {if $settings.report_orders}
-                               checked="checked"
-                            {/if}
+                <ul>
+                    <li>
+                        <input type="hidden" name="shop_syrreporders[report_orders]" value="0">
+                        <label>
+                        <span class="wa-checkbox">
+                            <input type="checkbox" name="shop_syrreporders[report_orders]" value="1"
+                                    {if $settings.report_orders}
+                                        checked="checked"
+                                    {/if}
                             >
-                    {_wp("Orders")}
-                </label>
-            </div>
-            <div class="value">
-                <label>
-                    <input type="checkbox" name="shop_syrreporders[report_weekdays]" value="1"
-                           {if $settings.report_weekdays}
-                               checked="checked"
-                            {/if}
-                           >
-                    {_wp("Weekdays Statistic")}
-                </label>
+                            <span>
+                                <span class="icon">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                            </span>
+                        </span>
+                            {_wp("Orders")}
+                        </label>
+                    </li>
+                    <li>
+                        <label>
+                            <input type="hidden" name="shop_syrreporders[report_weekdays]" value="0">
+                            <span class="wa-checkbox">
+                            <input type="checkbox" name="shop_syrreporders[report_weekdays]" value="1"
+                                    {if $settings.report_weekdays}
+                                        checked="checked"
+                                    {/if}
+                            >
+                            <span>
+                                <span class="icon">
+                                    <i class="fas fa-check"></i>
+                                </span>
+                            </span>
+                        </span>
+                            {_wp("Weekdays Statistic")}
+                        </label>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div class="field">
+        <div class="submit field">
             <div class="value submit">
                 <button type="submit" class="button green">{_wp("Save")}</button>
                 <span id="plugins-settings-form-status" style="display: none">
-                    <i style="vertical-align: middle" class="icon16 yes"></i> {_wp("Saved")}
+                    <span class="green icon"><i class="fas fa-check-circle"></i></span>
+                    {_wp("Saved")}
                 </span>
             </div>
         </div>

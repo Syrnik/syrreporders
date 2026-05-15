@@ -1,0 +1,53 @@
+.syrreporders-chart-container {
+    position: relative;
+    height: 300px;
+}
+
+.syrreporders-settings-block {
+    box-sizing: border-box;
+    margin-right: 1em;
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px 0 #bbb;
+    overflow: hidden;
+}
+
+.syrreporders-settings-block fieldset {
+    background-color: transparent;
+}
+
+.syrreporders-settings-block fieldset legend {
+    background-color: #e9e9e9;
+}
+
+.syrreporders-settings-block .divider-top {
+    border-top: 1px solid #e9e9e9;
+}
+
+.syrreporders-btn-row {
+    border-top: 1px solid #e9e9e9;
+    text-align: center;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+#reports-orders-controls,
+#reports-weekdays-controls,
+#reports-weekdays-table {
+    padding-top: 0;
+}
+
+.syrreporders-settings-block + .syrreporders-settings-block {
+    margin-top: 10px;
+}
+
+.syrreporders-color-count            { color: #3b7dc0; }
+.syrreporders-color-totals           { color: #129d0e; }
+.syrreporders-color-shipping         { color: #a38717; }
+.syrreporders-color-discount         { color: #ac3562; }
+.syrreporders-color-tax              { color: #1ba17a; }
+.syrreporders-color-avg_ticket_price { color: #87469f; }
+
+#syrRepOrdersTableValues td:not(:first-child) {
+    text-align: right;
+}

@@ -1,0 +1,88 @@
+<div class="block double-padded">
+    <div class="content">
+        <div id="reports-dow-orders" class="syrreporders-chart-container">
+            <canvas id="syr-weekdays-chart"></canvas>
+        </div>
+        <div class="block">
+            <div class="sidebar left400px">
+                <div id="reports-weekdays-controls" class="block padded">
+                    <div class="syrreporders-settings-block">
+                        <h2>{_wp("Best Weekdays")}</h2>
+                        <div class="fields">
+                            <div class="field-group">
+                                <div class="field">
+                                    <div class="name">{_wp('Max number of orders')}</div>
+                                    <div class="value" id="syr-weekdays-top-count">—</div>
+                                </div>
+                                <div class="field">
+                                    <div class="name">{_wp('Max total amount')}</div>
+                                    <div class="value" id="syr-weekdays-top-sum">—</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="syrreporders-settings-block">
+                        <h2>{_wp('Filters')}</h2>
+                        <form id="syrRepOrdersSettingsForm">
+                            <input type="hidden" name="report" value="weekdays">
+                            <div class="field">
+                                <div class="name">
+                                    {_wp("Order statuses")}
+                                    <p class="hint">{_wp('Count the statistics for the orders with the specified statuses only')}</p>
+                                </div>
+                                {foreach $all_order_states as $os=>$osopts}
+                                    <div class="value">
+                                        <label>
+                                            <input type="checkbox" name="weekdays_state[]" value="{$os}" checked>
+                                            <span style="{foreach $osopts["options"]["style"] as $k=>$v}{$k}:{$v};{/foreach}">{$osopts.name}</span>
+                                        </label>
+                                    </div>
+                                {/foreach}
+                            </div>
+                            <div class="syrreporders-btn-row">
+                                <button type="button" class="green button" id="s-plugin-syrorders-refresh-btn">{_wp('Refresh')}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="content left400px">
+                <div id="reports-weekdays-table" class="block padded">
+                    <table class="zebra">
+                        <thead>
+                            <tr>
+                                <th>{_wp("Day of week")}</th>
+                                <th>{_wp("Average sales")}</th>
+                                <th>{_wp("Average ticket price")}</th>
+                            </tr>
+                        </thead>
+                        <tbody id="syrRepWeekdaysTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="clear-both"></div>
+    </div>
+</div>
+
+<script>
+document.title = '{_wp("Weekdays")|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}';
+new SyrrepordersWeekdaysChart({
+    currency: {$currency|json_encode:256},
+    weekdayNames: [
+        {_wp("Monday")|json_encode:256},
+        {_wp("Tuesday")|json_encode:256},
+        {_wp("Wednesday")|json_encode:256},
+        {_wp("Thursday")|json_encode:256},
+        {_wp("Friday")|json_encode:256},
+        {_wp("Saturday")|json_encode:256},
+        {_wp("Sunday")|json_encode:256}
+    ],
+    labels: {
+        title:  {_wp("Orders by Weekdays")|json_encode:256},
+        totals: {_wp("Totals")|json_encode:256},
+        count:  {_wp("Number of orders")|json_encode:256}
+    }
+});
+</script>
