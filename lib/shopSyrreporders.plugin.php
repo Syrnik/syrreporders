@@ -29,8 +29,6 @@ class shopSyrrepordersPlugin extends shopPlugin
         $view->assign('settings', $settings);
         $content = $view->fetch($this->path . "/templates/menuitem.html");
         $this->addCss('css/syrreporders.css');
-        $this->addJs('js/chartjs/chart.umd.min.js');
-        $this->addJs('js/chartjs/chartjs-adapter-date-fns.bundle.min.js');
         $this->addJs('js/syrreporders-orders.js');
         $this->addJs('js/syrreporders-weekdays.js');
         return ['menu_li' => $content];
