@@ -3,15 +3,6 @@ import 'chartjs-adapter-date-fns'
 
 const STORAGE_KEY = 'syrreporders_weekdays_prefs'
 
-type CurrencyCode = 'RUB' | 'USD' | 'EUR' | 'UAH'
-
-const CURRENCY_FORMATS: Record<CurrencyCode, (v: number) => string> = {
-  RUB: v => `${v.toFixed(2)} руб.`,
-  USD: v => `$${v.toFixed(2)}`,
-  EUR: v => `€${v.toFixed(2)}`,
-  UAH: v => `${v.toFixed(2)} грн.`,
-}
-
 interface WeekdaysPrefs {
   states?: string[]
 }
@@ -82,8 +73,16 @@ class SyrrepordersWeekdaysChart {
   }
 
   private fmt(value: number): string {
-    const fn = CURRENCY_FORMATS[this.currency as CurrencyCode]
-    return fn ? fn(value) : value.toFixed(2)
+    try {
+      return new Intl.NumberFormat(undefined, {
+        style: 'currency',
+        currency: this.currency,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }).format(value)
+    } catch {
+      return value.toFixed(2)
+    }
   }
 
   private prepare(rawData: DowRow[]): PreparedData {
