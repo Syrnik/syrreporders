@@ -30,8 +30,8 @@ class shopSyrrepordersPlugin extends shopPlugin
         $response->addCss('wa-apps/shop/plugins/syrreporders/css/syrreporders.css');
         $response->addJs('wa-apps/shop/plugins/syrreporders/js/chartjs/chart.umd.min.js');
         $response->addJs('wa-apps/shop/plugins/syrreporders/js/chartjs/chartjs-adapter-date-fns.bundle.min.js');
-        $response->addJs('wa-apps/shop/plugins/syrreporders/js/syrreporders-orders.js');
-        $response->addJs('wa-apps/shop/plugins/syrreporders/js/syrreporders-weekdays.js');
+        $response->addJs('wa-apps/shop/plugins/syrreporders/js/syrreporders-orders.js?v=2.4.0');
+        $response->addJs('wa-apps/shop/plugins/syrreporders/js/syrreporders-weekdays.js?v=2.4.0');
         return array('menu_li' => $content);
     }
 

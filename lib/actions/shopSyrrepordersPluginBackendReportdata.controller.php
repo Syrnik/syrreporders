@@ -9,19 +9,10 @@ class shopSyrrepordersPluginBackendReportdataController extends waJsonController
     {
         $timeframe = shopReportsSalesAction::getTimeframeParams();
 
-        $Setting = new waAppSettingsModel();
-        $workflow = shopWorkflow::getConfig();
+        $workflow   = shopWorkflow::getConfig();
         $all_states = array_keys($workflow['states']);
 
-        $graph_settings = waRequest::post('orders_graph');
-        $orders_states  = waRequest::post('orders_state');
-
-        if ($graph_settings) {
-            $Setting->set(array('shop', 'syrreporders'), 'orders_graph', serialize($graph_settings));
-        }
-        if ($orders_states) {
-            $Setting->set(array('shop', 'syrreporders'), 'orders_states', serialize($orders_states));
-        }
+        $orders_states = waRequest::post('orders_state');
 
         $conditions = array(
             'start_date'    => $timeframe[0],
@@ -33,17 +24,30 @@ class shopSyrrepordersPluginBackendReportdataController extends waJsonController
         $Order = new shopSyrreporderspluginorderModel();
         $rows  = $Order->getOrderStats($conditions);
 
-        $count_data = $sales_data = $shipping_data = $discount_data = $tax_data = $avg_data = array();
+        $count_data = $sales_data = $shipping_data = $discount_data = $tax_data = $avg_data = $table_rows = array();
 
         foreach ($rows as $row) {
             $count = (float)$row['count'];
             $total = (float)$row['total'];
-            $count_data[]   = array($row['date'], $count);
-            $sales_data[]   = array($row['date'], $total);
-            $shipping_data[]= array($row['date'], (float)$row['shipping']);
-            $discount_data[]= array($row['date'], (float)$row['discount']);
-            $tax_data[]     = array($row['date'], (float)$row['tax']);
-            $avg_data[]     = array($row['date'], $count > 0 ? $total / $count : 0);
+            $ship  = (float)$row['shipping'];
+            $disc  = (float)$row['discount'];
+            $tax   = (float)$row['tax'];
+
+            $count_data[]    = array($row['date'], $count);
+            $sales_data[]    = array($row['date'], $total);
+            $shipping_data[] = array($row['date'], $ship);
+            $discount_data[] = array($row['date'], $disc);
+            $tax_data[]      = array($row['date'], $tax);
+            $avg_data[]      = array($row['date'], $count > 0 ? $total / $count : 0);
+
+            $table_rows[] = array(
+                'date'     => $row['date'],
+                'count'    => $count,
+                'total'    => $total,
+                'shipping' => $ship,
+                'discount' => $disc,
+                'tax'      => $tax,
+            );
         }
 
         $this->response = array(
@@ -53,6 +57,7 @@ class shopSyrrepordersPluginBackendReportdataController extends waJsonController
             'discount'        => $discount_data,
             'tax'             => $tax_data,
             'avg_ticket_price'=> $avg_data,
+            'table'           => $table_rows,
         );
     }
 }

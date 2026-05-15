@@ -18,7 +18,7 @@
                                         <div class="value">
                                             <input type="hidden" name="orders_graph[count]" value="0">
                                             <label>
-                                                <input type="checkbox" name="orders_graph[count]" data-serie="0" data-column="count" value="1"{if $orders_graph['count']} checked{/if}>
+                                                <input type="checkbox" name="orders_graph[count]" data-serie="0" data-column="count" value="1" checked>
                                                 <span class="syrreporders-color-count">{_wp('Number of orders')}</span>
                                             </label>
                                         </div>
@@ -28,35 +28,35 @@
                                         <div class="value">
                                             <input type="hidden" name="orders_graph[totals]" value="0">
                                             <label>
-                                                <input type="checkbox" name="orders_graph[totals]" data-serie="1" data-column="totals" value="1"{if $orders_graph['totals']} checked{/if}>
+                                                <input type="checkbox" name="orders_graph[totals]" data-serie="1" data-column="totals" value="1" checked>
                                                 <span class="syrreporders-color-totals">{_wp('Totals')}</span>
                                             </label>
                                         </div>
                                         <div class="value">
                                             <input type="hidden" name="orders_graph[shipping]" value="0">
                                             <label>
-                                                <input type="checkbox" name="orders_graph[shipping]" data-serie="2" data-column="shipping" value="1"{if $orders_graph['shipping']} checked{/if}>
+                                                <input type="checkbox" name="orders_graph[shipping]" data-serie="2" data-column="shipping" value="1" checked>
                                                 <span class="syrreporders-color-shipping">{_wp('Shipping Total')}</span>
                                             </label>
                                         </div>
                                         <div class="value">
                                             <input type="hidden" name="orders_graph[discount]" value="0">
                                             <label>
-                                                <input type="checkbox" name="orders_graph[discount]" data-serie="3" data-column="discount" value="1"{if $orders_graph['discount']} checked{/if}>
+                                                <input type="checkbox" name="orders_graph[discount]" data-serie="3" data-column="discount" value="1" checked>
                                                 <span class="syrreporders-color-discount">{_wp('Discount Total')}</span>
                                             </label>
                                         </div>
                                         <div class="value">
                                             <input type="hidden" name="orders_graph[tax]" value="0">
                                             <label>
-                                                <input type="checkbox" name="orders_graph[tax]" data-serie="4" data-column="tax" value="1"{if $orders_graph['tax']} checked{/if}>
+                                                <input type="checkbox" name="orders_graph[tax]" data-serie="4" data-column="tax" value="1" checked>
                                                 <span class="syrreporders-color-tax">{_wp('Tax Total')}</span>
                                             </label>
                                         </div>
                                         <div class="value">
                                             <input type="hidden" name="orders_graph[avg_ticket_price]" value="0">
                                             <label>
-                                                <input type="checkbox" name="orders_graph[avg_ticket_price]" data-serie="5" data-column="avg_ticket_price" value="1"{if $orders_graph['avg_ticket_price']} checked{/if}>
+                                                <input type="checkbox" name="orders_graph[avg_ticket_price]" data-serie="5" data-column="avg_ticket_price" value="1" checked>
                                                 <span class="syrreporders-color-avg_ticket_price">{_wp('Average ticket price')}</span>
                                             </label>
                                         </div>
@@ -72,7 +72,7 @@
                                         {foreach $orderStates as $os=>$osopts}
                                             <div class="value">
                                                 <label>
-                                                    <input type="checkbox" name="orders_state[]" value="{$os}" data-update="1"{if in_array($os, $orders_states)} checked{/if}>
+                                                    <input type="checkbox" name="orders_state[]" value="{$os}" checked>
                                                     <span style="{foreach $osopts["options"]["style"] as $k=>$v}{$k}:{$v};{/foreach}">{$osopts.name}</span>
                                                 </label>
                                             </div>
@@ -91,28 +91,15 @@
                         <thead>
                             <tr>
                                 <th>{if $group_by == 'months'}{_wp('Month')}{else}{_wp('Date')}{/if}</th>
-                                <th class="col-count"{if not $orders_graph['count']} style="display:none"{/if}>{_wp('Number of orders')}</th>
-                                <th class="col-totals"{if not $orders_graph['totals']} style="display:none"{/if}>{_wp('Totals')}</th>
-                                <th class="col-shipping"{if not $orders_graph['shipping']} style="display:none"{/if}>{_wp('Shipping Total')}</th>
-                                <th class="col-discount"{if not $orders_graph['discount']} style="display:none"{/if}>{_wp('Discounts Total')}</th>
-                                <th class="col-tax"{if not $orders_graph['tax']} style="display:none"{/if}>{_wp('Taxes Total')}</th>
-                                <th class="col-avg_ticket_price"{if not $orders_graph['avg_ticket_price']} style="display:none"{/if}>{_wp('Average ticket price')}</th>
+                                <th class="col-count">{_wp('Number of orders')}</th>
+                                <th class="col-totals">{_wp('Totals')}</th>
+                                <th class="col-shipping">{_wp('Shipping Total')}</th>
+                                <th class="col-discount">{_wp('Discounts Total')}</th>
+                                <th class="col-tax">{_wp('Taxes Total')}</th>
+                                <th class="col-avg_ticket_price">{_wp('Average ticket price')}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {foreach $table_data as $row}
-                                {if $row['count'] > 0}
-                                    <tr>
-                                        <td>{$row['date']|wa_date}</td>
-                                        <td class="col-count"{if not $orders_graph['count']} style="display:none"{/if}>{$row['count']}</td>
-                                        <td class="col-totals"{if not $orders_graph['totals']} style="display:none"{/if}>{$row['total']|wa_format_amount_currency:$currency}</td>
-                                        <td class="col-shipping"{if not $orders_graph['shipping']} style="display:none"{/if}>{$row['shipping']|wa_format_amount_currency:$currency}</td>
-                                        <td class="col-discount"{if not $orders_graph['discount']} style="display:none"{/if}>{$row['discount']|wa_format_amount_currency:$currency}</td>
-                                        <td class="col-tax"{if not $orders_graph['tax']} style="display:none"{/if}>{$row['tax']|wa_format_amount_currency:$currency}</td>
-                                        <td class="col-avg_ticket_price"{if not $orders_graph['avg_ticket_price']} style="display:none"{/if}>{$row['avg_ticket_price']|wa_format_amount_currency:$currency}</td>
-                                    </tr>
-                                {/if}
-                            {/foreach}
                         </tbody>
                     </table>
                 </div>
@@ -137,22 +124,6 @@ new SyrrepordersOrdersChart({
         discount:         '{_wp("Discount Total")|escape:'javascript'}',
         tax:              '{_wp("Tax Total")|escape:'javascript'}',
         avg_ticket_price: '{_wp("Average ticket price")|escape:'javascript'}'
-    },
-    hidden: {
-        count:            {if $orders_graph['count']}false{else}true{/if},
-        totals:           {if $orders_graph['totals']}false{else}true{/if},
-        shipping:         {if $orders_graph['shipping']}false{else}true{/if},
-        discount:         {if $orders_graph['discount']}false{else}true{/if},
-        tax:              {if $orders_graph['tax']}false{else}true{/if},
-        avg_ticket_price: {if $orders_graph['avg_ticket_price']}false{else}true{/if}
-    },
-    data: {json_encode([
-        'count'           => ifset($chart_data['count'], []),
-        'sales'           => ifset($chart_data['sales'], []),
-        'shipping'        => ifset($chart_data['shipping'], []),
-        'discount'        => ifset($chart_data['discount'], []),
-        'tax'             => ifset($chart_data['tax'], []),
-        'avg_ticket_price'=> ifset($chart_data['avg_ticket_price'], [])
-    ])}
+    }
 });
 </script>
