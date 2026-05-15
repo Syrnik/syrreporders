@@ -72,5 +72,13 @@ return array(
     'css/ui2/_*.css',
     '.php_cs.cache',
     '.github/*',
-    'tests/*'
+    'tests/*',
+    'compress-app-plugin.php',
+    'package.json',
+    'package-lock.json',
+    'tsconfig.json',
+    'vite.orders.config.ts',
+    'vite.weekdays.config.ts',
+    'node_modules/*',
+    'src/*'
 );
