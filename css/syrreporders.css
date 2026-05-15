@@ -27,3 +27,24 @@
     margin-top: 10px;
     padding-top: 10px;
 }
+
+#reports-orders-controls,
+#reports-weekdays-controls,
+#reports-weekdays-table {
+    padding-top: 0;
+}
+
+.syrreporders-settings-block + .syrreporders-settings-block {
+    margin-top: 10px;
+}
+
+.syrreporders-color-count            { color: #3b7dc0; }
+.syrreporders-color-totals           { color: #129d0e; }
+.syrreporders-color-shipping         { color: #a38717; }
+.syrreporders-color-discount         { color: #ac3562; }
+.syrreporders-color-tax              { color: #1ba17a; }
+.syrreporders-color-avg_ticket_price { color: #87469f; }
+
+#syrRepOrdersTableValues td:not(:first-child) {
+    text-align: right;
+}
