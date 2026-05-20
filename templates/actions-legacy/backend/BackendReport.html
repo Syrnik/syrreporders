@@ -114,8 +114,9 @@
 <script>
 document.title = '{_wp("Order Report")|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}';
 new SyrrepordersOrdersChart({
-    currency: {$currency|json_encode:256},
-    groupBy:  {$group_by|json_encode:256},
+    currency:         {$currency|json_encode:256},
+    groupBy:          {$group_by|json_encode:256},
+    initialTimeframe: {$initial_timeframe|json_encode:256},
     labels: {
         title:            {_wp("Orders")|json_encode:256},
         count:            {_wp("Number of orders")|json_encode:256},
