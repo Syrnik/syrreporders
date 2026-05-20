@@ -84,7 +84,8 @@
 <script>
 document.title = '{_wp("Weekdays")|cat:" — ":{$wa->accountName(false)}|escape:'javascript'}';
 new SyrrepordersWeekdaysChart({
-    currency: {$currency|json_encode:256},
+    currency:         {$currency|json_encode:256},
+    initialTimeframe: {$initial_timeframe|json_encode:256},
     weekdayNames: [
         {_wp("Monday")|json_encode:256},
         {_wp("Tuesday")|json_encode:256},

@@ -29,9 +29,17 @@ interface OrdersPrefs {
   states?: string[]
 }
 
+interface InitialTimeframe {
+  timeframe: string
+  groupby: string
+  from?: string
+  to?: string
+}
+
 interface OrdersConfig {
   currency: string
   groupBy: 'days' | 'months'
+  initialTimeframe: InitialTimeframe
   labels: Record<SeriesKey | 'title', string>
 }
 
@@ -74,11 +82,13 @@ class SyrrepordersOrdersChart {
   private readonly groupBy: 'days' | 'months'
   private readonly labels: Record<SeriesKey | 'title', string>
   private readonly chart: Chart
+  private readonly initialTimeframe: InitialTimeframe
 
   constructor(config: OrdersConfig) {
-    this.currency = config.currency
-    this.groupBy  = config.groupBy
-    this.labels   = config.labels
+    this.currency         = config.currency
+    this.groupBy          = config.groupBy
+    this.labels           = config.labels
+    this.initialTimeframe = config.initialTimeframe
 
     const prefs = loadPrefs()
     const graph = prefs.graph ?? {}
@@ -91,7 +101,7 @@ class SyrrepordersOrdersChart {
     this.restoreCheckboxes(prefs)
     this.applyColumnVisibility()
     this.bindEvents()
-    this.refresh()
+    $(document).ready(() => this.refresh())
   }
 
   private fmt(value: number): string {
@@ -271,11 +281,36 @@ class SyrrepordersOrdersChart {
     this.updateTable(data.table)
   }
 
+  private buildTimeframeData(): string {
+    const $active = $('.js-reports-timeframe-dropdown li.selected, .js-reports-timeframe-dropdown li.active').first()
+    if ($active.length) {
+      const timeframe = String($active.data('timeframe') || '30')
+      const groupby   = String($active.data('groupby')   || 'days')
+      const p: Record<string, string> = { timeframe, groupby }
+      if (timeframe === 'custom') {
+        const from = String($('.js-custom-timeframe [name="from"]').val() || '')
+        const to   = String($('.js-custom-timeframe [name="to"]').val()   || '')
+        if (from) p.from = from
+        if (to)   p.to   = to
+      }
+      return $.param(p)
+    }
+    // Legacy UI: use server-provided initial timeframe
+    const tf = this.initialTimeframe
+    const p: Record<string, string> = { timeframe: tf.timeframe, groupby: tf.groupby }
+    if (tf.from) p.from = tf.from
+    if (tf.to)   p.to   = tf.to
+    return $.param(p)
+  }
+
   refresh(): JQuery.jqXHR<AjaxResponse> {
     const $btn = $('#s-plugin-syrorders-refresh-btn').prop('disabled', true)
     $btn.find('.js-syrorders-refresh-spinner').show()
 
-    return $.post('?plugin=syrreporders&action=reportdata', $('#syrRepOrdersSettingsForm').serialize())
+    return $.post(
+      '?plugin=syrreporders&action=reportdata',
+      $('#syrRepOrdersSettingsForm').serialize() + '&' + this.buildTimeframeData(),
+    )
       .done((resp: AjaxResponse) => {
         if (resp?.status === 'ok') this.updateChart(resp.data)
       })

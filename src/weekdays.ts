@@ -3,6 +3,13 @@ import 'chartjs-adapter-date-fns'
 
 const STORAGE_KEY = 'syrreporders_weekdays_prefs'
 
+interface InitialTimeframe {
+  timeframe: string
+  groupby: string
+  from?: string
+  to?: string
+}
+
 interface WeekdaysPrefs {
   states?: string[]
 }
@@ -10,6 +17,7 @@ interface WeekdaysPrefs {
 interface WeekdaysConfig {
   currency: string
   weekdayNames: string[]
+  initialTimeframe: InitialTimeframe
   labels: {
     title: string
     totals: string
@@ -59,17 +67,19 @@ class SyrrepordersWeekdaysChart {
   private readonly weekdayNames: string[]
   private readonly labels: WeekdaysConfig['labels']
   private readonly chart: Chart
+  private readonly initialTimeframe: InitialTimeframe
 
   constructor(config: WeekdaysConfig) {
-    this.currency     = config.currency
-    this.weekdayNames = config.weekdayNames
-    this.labels       = config.labels
+    this.currency         = config.currency
+    this.weekdayNames     = config.weekdayNames
+    this.labels           = config.labels
+    this.initialTimeframe = config.initialTimeframe
     this.chart        = this.createChart()
 
     const prefs = loadPrefs()
     this.restoreCheckboxes(prefs.states ?? null)
     this.bindEvents()
-    this.refresh()
+    $(document).ready(() => this.refresh())
   }
 
   private fmt(value: number): string {
@@ -207,11 +217,36 @@ class SyrrepordersWeekdaysChart {
     return { states }
   }
 
+  private buildTimeframeData(): string {
+    const $active = $('.js-reports-timeframe-dropdown li.selected, .js-reports-timeframe-dropdown li.active').first()
+    if ($active.length) {
+      const timeframe = String($active.data('timeframe') || '30')
+      const groupby   = String($active.data('groupby')   || 'days')
+      const p: Record<string, string> = { timeframe, groupby }
+      if (timeframe === 'custom') {
+        const from = String($('.js-custom-timeframe [name="from"]').val() || '')
+        const to   = String($('.js-custom-timeframe [name="to"]').val()   || '')
+        if (from) p.from = from
+        if (to)   p.to   = to
+      }
+      return $.param(p)
+    }
+    // Legacy UI: use server-provided initial timeframe
+    const tf = this.initialTimeframe
+    const p: Record<string, string> = { timeframe: tf.timeframe, groupby: tf.groupby }
+    if (tf.from) p.from = tf.from
+    if (tf.to)   p.to   = tf.to
+    return $.param(p)
+  }
+
   refresh(): JQuery.jqXHR<AjaxResponse> {
     const $btn = $('#s-plugin-syrorders-refresh-btn').prop('disabled', true)
     $btn.find('.js-syrorders-refresh-spinner').show()
 
-    return $.post('?plugin=syrreporders&action=reportweekdaysdata', $('#syrRepOrdersSettingsForm').serialize())
+    return $.post(
+      '?plugin=syrreporders&action=reportweekdaysdata',
+      $('#syrRepOrdersSettingsForm').serialize() + '&' + this.buildTimeframeData(),
+    )
       .done((resp: AjaxResponse) => {
         if (resp?.status === 'ok') {
           this.updateChart(resp.data.dow)
